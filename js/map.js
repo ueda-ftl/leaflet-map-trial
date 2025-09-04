@@ -1,61 +1,5 @@
 (() => {
     "use strict";
-    
-    class PointGroup {
-        constructor() {
-            this.layer = L.layerGroup()
-            this.latlngs = [];
-        }
-        addTo(map) {
-            return this.layer.addTo(map);
-        }
-        clear() {
-            this.latlngs.splice(0);
-            return this.layer.clearLayers();
-        }
-        remove(latlng) {
-            const index = this.latlngs.indexOf(latlng);
-            this.latlngs.splice(index, 1);
-        }
-        get empty() {
-            return this.latlngs.length === 0;
-        }
-        get latlng() {
-            return this.empty ? null : this.latlngs[0];
-        }
-        get latlngs_csv() {
-            const header = "lat,lng";
-            const body = this.latlngs.map((e) => `${e.lat},${e.lng}`).join("\n");
-            return header + "\n" + body;
-        }
-    }
-
-    function _currentMarker(latlng) {
-        return L.marker(latlng, {
-            "draggable": true
-        });
-    }
-
-    function _accuracyMarker(latlng, accuracy) {
-        return L.circle(latlng, {
-            radius: accuracy / 2,
-            opacity: 0.6,
-            fillOpacity: 0.05,
-        });
-    }
-
-    function updateCurrent(g, latlng, accuracy) {
-        // 現在位置情報を追加、その表示を更新
-        g.clear();
-        g.latlngs.push(latlng);
-        _currentMarker(latlng).addTo(g.layer)
-            .on("dragend", (e) => {
-                g.latlngs.splice(0);
-                g.latlngs.push(e.target.getLatLng());
-            });
-        return _accuracyMarker(latlng, accuracy).addTo(g.layer)
-            .bindPopup(`accuracy: ${accuracy}`);
-    }
 
     function _trajectoryMarker(latlng, r) {
         return L.circleMarker(latlng, {
@@ -76,17 +20,28 @@
 
     function updateTrajectory(g, latlng, n) {
         // 現在位置情報を追加、移動軌跡を再描画
-        g.layer.clearLayers();
-        g.latlngs.push(latlng);
-        const latlngs = g.latlngs.slice(-n).toReversed();
+        const latlngs = g.getLayers().slice(-n).toReversed().map((e) => e.getLatLng());
+        g.clearLayers();
         latlngs.forEach((latlng, i) => {
             const r = (n - i) / n;
-            _trajectoryMarker(latlng, r).addTo(g.layer);
+            _trajectoryMarker(latlng, r).addTo(g);
         });
         _trajectoryPolyline(latlngs, 2);
     }
 
-    function _favoriteMarker(latlng, radius) {
+    const iconFavorite = L.AwesomeMarkers.icon({
+        icon: "bookmark",
+        markerColor: "red",
+    });
+    function _favoriteMarker(latlng) {
+        return L.marker(latlng, {
+            icon: iconFavorite,
+            opacity: 0.8,
+            draggable: true,
+        });
+    }
+
+    function _favoriteCircle(latlng, radius) {
         return L.circle(latlng, {
             radius: radius,
             color: "red",
@@ -98,24 +53,27 @@
 
     function addFavorite(g, latlng, radius) {
         // POI位置情報を追加、その表示を更新
-        g.latlngs.push(latlng);
-        return _favoriteMarker(latlng, radius).addTo(g.layer);
-    }
-
-    function updateFavorite(g, radius) {
-        g.layer.clearLayers();
-        g.latlngs.forEach((latlng) => {
-            _favoriteMarker(latlng, radius).addTo(g.layer);
+        const circle = _favoriteCircle(latlng, radius).addTo(g);
+        const marker = _favoriteMarker(latlng).addTo(g).on("dragend", (e) => {
+            circle.setLatLng(marker.getLatLng());
         });
+    }
+    
+    function _latlngs_csv(g) {
+        const header = "lat,lng";
+        const latlngs = g.getLayers().map((e) => e.getLatLng());
+        const body = latlngs.map((e) => `${e.lat},${e.lng}`).join("\n");
+        return header + "\n" + body;
     }
 
     function downloadCSV(g) {
+        // LayerGroup の座標列をCSVとしてダウンロード
         const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
         // リンククリエイト
         const downloadLink = document.createElement("a");
         downloadLink.download = "latlngs.csv";
         // ファイル情報設定
-        downloadLink.href = URL.createObjectURL(new Blob([bom, g.latlngs_csv], {
+        downloadLink.href = URL.createObjectURL(new Blob([bom, _latlngs_csv(g)], {
             type: "text/csv"
         }));
         downloadLink.dataset.downloadurl = ["text/csv", downloadLink.download, downloadLink.href].join(":");
@@ -125,8 +83,10 @@
 
     function updateUrlWithFavorites(favorite) {
         // favorite 座標列を URLクエリに追加
-        if (favorite.empty) return;
-        const coords = favorite.latlngs.map(e => [e.lat, e.lng]);
+        const layers = favorite.getLayers();
+        if (layers.length === 0) return;
+        const latlngs = layers.map((e) => e.getLatLng());
+        const coords = latlngs.map(e => [e.lat, e.lng]);
         const encoded = encodePolyline(coords);
         const params = new URLSearchParams(location.search);
         params.set("fav", encoded);
@@ -134,7 +94,7 @@
         history.replaceState(null, "", newUrl);
     }
 
-    function restoreFavoritesByUrl() {
+    function restoreFavoritesByUrl(favorite) {
         // URL から favorite を復元
         const params = new URLSearchParams(location.search);
         if (params.has("fav")) {
@@ -147,71 +107,51 @@
 
     // tile レイヤ
     const tiles = {
-        "osm": L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        osm: L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }),
-        "google": L.tileLayer("https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}", {
+        google: L.tileLayer("https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}", {
             maxZoom: 19,
             attribution: '&copy; <a href="https://developers.google.com/maps/documentation">Google Map</a>'
         }),
     };
     // overlay レイヤ
-    const current = new PointGroup();
-    const trajectory = new PointGroup();
-    const favorite = new PointGroup();
-    const overlays = {
-        current: current.layer,
-        trajectory: trajectory.layer,
-        favorite: favorite.layer,
-    };
+    const current = L.layerGroup();
+    const trajectory = L.layerGroup();
+    const favorite = L.layerGroup();
     // map 生成
     const map = L.map("map", {
-        layers: [
-            Object.values(tiles)[0],
-            ...Object.values(overlays),
-        ],
+        layers: [ tiles.osm, current, trajectory, favorite ],
         zoomControl: false,
     }).fitWorld();
-    const _layerControl = L.control.layers(tiles, overlays).addTo(map);
-    L.control.scale({
-        imperial: false
-    }).addTo(map);
-    //L.control.locate({
-    //    position: "bottomleft",
-    //    flyTo: true,
-    //}).addTo(map);
-    restoreFavoritesByUrl();
+    L.control.layers(tiles, { current, trajectory, favorite }).addTo(map);
+    L.control.scale({imperial: false}).addTo(map);
+    L.control.locate({ position: "bottomleft", layer: current, flyTo: true, locateOptions: { maxZoom: 10 } }).addTo(map).start();
+    restoreFavoritesByUrl(favorite);
 
     // 座標列全削除ボタン
     L.easyButton("fa-solid fa-ban", () => {
-        if (favorite.empty && trajectory.empty) return;
+        if (favorite.getLayers().length === 0 && trajectory.getLayers().length === 0) return;
         const result = confirm("remove all favorite and trajectory");
         if (result) {
-            favorite.clear();
-            trajectory.clear();
+            favorite.clearLayers();
+            trajectory.clearLayers();
         }
     }).addTo(map);
     // favorite 追加ボタン
     L.easyButton("fa-regular fa-square-plus", () => {
-        const latlng = current.latlng;
+        const layers = current.getLayers();
+        if (layers.length === 0) return;
+        const latlng = layers[0].getLatLng();
         if (latlng === null) return;
-        addFavorite(favorite, latlng, 30.0)
-            .bindTooltip(`${latlng.lat} ${latlng.lng}`)
-            .on("click", () => {
-                // クリックしたものを削除
-                const result = confirm("remove this");
-                if (result) {
-                    favorite.remove(latlng);
-                    updateFavorite(favorite, 30.0);
-                }
-            });
+        addFavorite(favorite, latlng, 30.0);
     }).addTo(map);
     // favorite 最終登録削除ボタン
     L.easyButton("fa-regular fa-square-minus", () => {
-        if (current.latlng === null) return;
-        favorite.latlngs.pop();
-        updateFavorite(favorite, 30.0);
+        const layers = favorite.getLayers();
+        if (layers.length === 0) return;
+        favorite.removeLayer(layers.slice(-1)[0]);
     }).addTo(map);
     // favorite CSVダウンロードボタン
     // L.easyButton("fa-solid fa-download", () => {
@@ -222,30 +162,30 @@
         updateUrlWithFavorites(favorite)
     }).addTo(map);
 
-    let first = true;
+    //let first = true;
 
     // 現在位置検知時、その場所にマーカを表示
-    function onLocationFound(e) {
-        updateCurrent(current, e.latlng, e.accuracy);
-        updateTrajectory(trajectory, e.latlng, 100);
-        if (first) {
-            map.setZoom(18)
-            map.panTo(e.latlng);
-            first = false;
-        }
-    }
-    // 検知失敗時、alert表示
-    function onLocationError(e) {
-        //alert(e.message);
-    }
+    //function onLocationFound(e) {
+    //    updateCurrent(current, e.latlng, e.accuracy);
+    //    updateTrajectory(trajectory, e.latlng, 100);
+    //    if (first) {
+    //        map.setZoom(18)
+    //        map.panTo(e.latlng);
+    //        first = false;
+    //    }
+    //}
+    //// 検知失敗時、alert表示
+    //function onLocationError(e) {
+    //    //alert(e.message);
+    //}
 
     // イベントハンドラ登録
-    map.on("locationfound", onLocationFound);
-    map.on("locationerror", onLocationError);
+    //map.on("locationfound", onLocationFound);
+    //map.on("locationerror", onLocationError);
 
     // location検知要求
-    map.locate({
-        maxZoom: 16,
-        watch: true
-    });
+    //map.locate({
+    //    maxZoom: 16,
+    //    watch: true
+    //});
 })();
