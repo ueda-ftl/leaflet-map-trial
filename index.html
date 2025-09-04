@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<!--
+	leaflet 公式サイトの以下のサンプルをベースとして改変
+	cf. https://leafletjs.com/examples/mobile/
+-->
+
+<head>
+	<base target="_top">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- 実験コードなのでキャッシュを無効化 -->
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Cache-Control" content="no-cache">	
+
+	<title>Mobile tutorial - Leaflet</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+	<!-- EasyButton プラグインを使用
+		cf. https://github.com/CliffCloud/Leaflet.EasyButton
+	-->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+	<script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+
+	<!-- leaflet-locatecontrol プラグインを使用
+		cf. https://github.com/domoritz/leaflet-locatecontrol
+	-->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+	<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+
+	<!-- font awesome 使用 -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+		integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+
+	<script src="polyline_encoding.js"></script>
+
+	<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		.leaflet-container {
+			height: 400px;
+			width: 600px;
+			max-width: 100%;
+			max-height: 100%;
+		}
+	</style>
+
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+		}
+		#map {
+			height: 100%;
+			width: 100vw;
+		}
+	</style>
+</head>
+
+<body>
+<div id="map"></div>
+<script>
+
+	(() => {
+		class PointGroup {
+			constructor() {
+				this.layer = L.layerGroup()
+				this.latlngs = [];
+			}
+			addTo(map) {
+				return this.layer.addTo(map);
+			}
+			clear() {
+				this.latlngs.splice(0);
+				return this.layer.clearLayers();
+			}
+			remove(latlng) {
+				const index = this.latlngs.indexOf(latlng);
+				this.latlngs.splice(index, 1);
+			}
+			get empty() {
+				return this.latlngs.length === 0;
+			}
+			get latlng() {
+				return this.empty ? null : this.latlngs[0];
+			}
+			get latlngs_csv() {
+				const header = "lat,lng";
+				const body = this.latlngs.map((e) => `${e.lat},${e.lng}`).join("\n");
+				return header + "\n" + body;
+			}
+		}
+		function _currentMarker(latlng) {
+			return L.marker(latlng, {"draggable": true});
+		}
+		function _accuracyMarker(latlng, accuracy) {
+			return L.circle(latlng, {
+				radius: accuracy / 2,
+				opacity: 0.6,
+				fillOpacity: 0.05,
+			});
+		}
+		function updateCurrent(g, latlng, accuracy) {
+			// 現在位置情報を追加、その表示を更新
+			g.clear();
+			g.latlngs.push(latlng);
+			_currentMarker(latlng).addTo(g.layer)
+				.on("dragend", (e) => {
+					g.latlngs.splice(0);
+					g.latlngs.push(e.target.getLatLng());
+				});
+			return _accuracyMarker(latlng, accuracy).addTo(g.layer)
+				.bindPopup(`accuracy: ${accuracy}`);
+		}
+		function _trajectoryMarker(latlng, r) {
+			return L.circleMarker(latlng, {
+				radius: 5 * r,
+				stroke: false,
+				fillColor: "green",
+				fillOpacity: 0.8 * r,
+			});
+		}
+		function _trajectoryPolyline(latlngs, w) {
+			return L.polyline(latlngs, {
+				weight: w,
+				color: "green",
+				opacity: 0.5,
+			});
+		}
+		function updateTrajectory(g, latlng, n) {
+			// 現在位置情報を追加、移動軌跡を再描画
+			g.layer.clearLayers();
+			g.latlngs.push(latlng);
+			const latlngs = g.latlngs.slice(-n).toReversed();
+			latlngs.forEach((latlng, i) => {
+				const r = (n - i) / n;
+				_trajectoryMarker(latlng, r).addTo(g.layer);
+			});
+			_trajectoryPolyline(latlngs, 2);
+		}
+		function _favoriteMarker(latlng, radius) {
+			return L.circle(latlng, {
+				radius: radius,
+				color: "red",
+				fillColor: "red",
+				opacity: 0.4,
+				fillOpacity: 0.1,
+			});
+		}
+		function addFavorite(g, latlng, radius) {
+			// POI位置情報を追加、その表示を更新
+			g.latlngs.push(latlng);
+			return _favoriteMarker(latlng, radius).addTo(g.layer);
+		}
+		function updateFavorite(g, radius) {
+			g.layer.clearLayers();
+			g.latlngs.forEach((latlng) => {
+				_favoriteMarker(latlng, radius).addTo(g.layer);
+			});
+		}
+		
+		function downloadCSV(g) {
+			const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+			// リンククリエイト
+			const downloadLink = document.createElement("a");
+			downloadLink.download = "latlngs.csv";
+			// ファイル情報設定
+			downloadLink.href = URL.createObjectURL(new Blob([bom, g.latlngs_csv], { type: "text/csv" }));
+			downloadLink.dataset.downloadurl = ["text/csv", downloadLink.download, downloadLink.href].join(":");
+			// イベント実行
+			downloadLink.click();
+		}
+
+		function updateUrlWithFavorites(favorite) {
+			// favorite 座標列を URLクエリに追加
+			if (favorite.empty) return;
+			const coords = favorite.latlngs.map(e => [e.lat, e.lng]);
+			const encoded = encodePolyline(coords);
+			const params = new URLSearchParams(location.search);
+			params.set("fav", encoded);
+			const newUrl = `${location.pathname}?${params.toString()}`;
+			history.replaceState(null, "", newUrl);
+		}
+		function restoreFavoritesByUrl() {
+			// URL から favorite を復元
+			const params = new URLSearchParams(location.search);
+			if (params.has("fav")) {
+				const decoded = decodePolyline(params.get("fav"));
+				decoded.forEach(([lat, lng]) => {
+					addFavorite(favorite, L.latLng(lat, lng), 30.0);
+				});
+			}
+		}
+
+		// マップを生成
+		const tiles = {
+			"osm": L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+				maxZoom: 19,
+				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+			}),
+			"google": L.tileLayer("https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}", {
+				maxZoom: 19,
+				attribution: '&copy; <a href="https://developers.google.com/maps/documentation">Google Map</a>'
+			}),
+		};
+		// レイヤデータを作成
+		const current = new PointGroup();
+		const trajectory = new PointGroup();
+		const favorite = new PointGroup();
+		const overlays = {
+			current: current.layer,
+			trajectory: trajectory.layer,
+			favorite: favorite.layer,
+		};
+		const map = L.map("map", {
+			layers: [
+				Object.values(tiles)[0],
+				...Object.values(overlays),
+			],
+			zoomControl: false,
+		}).fitWorld();
+		const _layerControl = L.control.layers(tiles, overlays).addTo(map);
+		L.control.scale({imperial: false}).addTo(map);
+		restoreFavoritesByUrl();
+		
+		// 座標列全削除ボタン
+		L.easyButton("fa-solid fa-ban", () => {
+			if (favorite.empty && trajectory.empty) return;
+			const result = confirm("remove all favorite and trajectory");
+			if (result) {
+				favorite.clear();
+				trajectory.clear();
+			}
+		}).addTo(map);
+		// favorite 追加ボタン
+		L.easyButton("fa-regular fa-square-plus", () => {
+			const latlng = current.latlng;
+			if (latlng === null) return;
+			addFavorite(favorite, latlng, 30.0)
+			.bindTooltip(`${latlng.lat} ${latlng.lng}`)
+			.on("click", () => {
+				// クリックしたものを削除
+				const result = confirm("remove this");
+				if (result) {
+					favorite.remove(latlng);
+					updateFavorite(favorite, 30.0);
+				}
+			});
+		}).addTo(map);
+		// favorite 最終登録削除ボタン
+		L.easyButton("fa-regular fa-square-minus", () => {
+			if (current.latlng === null) return;
+			favorite.latlngs.pop();
+			updateFavorite(favorite, 30.0);
+		}).addTo(map);
+		// favorite CSVダウンロードボタン
+		// L.easyButton("fa-solid fa-download", () => {
+		// 	downloadCSV(favorite);
+		// }).addTo(map);
+		// favorite URL保存ボタン
+		L.easyButton("fa-solid fa-bookmark", () => {
+			updateUrlWithFavorites(favorite)
+		}).addTo(map);
+		
+		let first = true;
+		
+		// 現在位置検知時、その場所にマーカを表示
+		function onLocationFound(e) {
+			updateCurrent(current, e.latlng, e.accuracy);
+			updateTrajectory(trajectory, e.latlng, 100);
+			if (first) {
+				map.setZoom(18)
+				map.panTo(e.latlng);
+				first = false;
+			}
+		}
+		// 検知失敗時、alert表示
+		function onLocationError(e) {
+			//alert(e.message);
+		}
+		
+		// イベントハンドラ登録
+		map.on("locationfound", onLocationFound);
+		map.on("locationerror", onLocationError);
+		
+		// location検知要求
+		map.locate({maxZoom: 16, watch: true});
+	})();
+</script>
+</body>
+</html>
