@@ -20,11 +20,12 @@
 
     function updateTrajectory(g, latlng, n) {
         // 現在位置情報を追加、移動軌跡を再描画
-        const latlngs = g.getLayers().slice(-n).toReversed().map((e) => e.getLatLng());
+        const latlngs = g.getLayers().slice(-(n - 1)).map((e) => e.getLatLng());
+        latlngs.push(latlng);
         g.clearLayers();
-        latlngs.forEach((latlng, i) => {
+        latlngs.toReversed().forEach((e, i) => {
             const r = (n - i) / n;
-            _trajectoryMarker(latlng, r).addTo(g);
+            _trajectoryMarker(e, r).addTo(g);
         });
         _trajectoryPolyline(latlngs, 2);
     }
@@ -108,11 +109,13 @@
     // tile レイヤ
     const tiles = {
         osm: L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            maxZoom: 19,
+            maxNativeZoom: 19,
+            maxZoom: 21,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }),
         google: L.tileLayer("https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}", {
-            maxZoom: 19,
+            maxNativeZoom: 21,
+            maxZoom: 21,
             attribution: '&copy; <a href="https://developers.google.com/maps/documentation">Google Map</a>'
         }),
     };
@@ -123,11 +126,20 @@
     // map 生成
     const map = L.map("map", {
         layers: [ tiles.osm, current, trajectory, favorite ],
+        center: L.latLng(35.6251316, 139.7219512),
         zoomControl: false,
+        zoom: 16,
+        minZoom: 12,
     }).fitWorld();
     L.control.layers(tiles, { current, trajectory, favorite }).addTo(map);
     L.control.scale({imperial: false}).addTo(map);
-    L.control.locate({ position: "bottomleft", layer: current, flyTo: true, locateOptions: { maxZoom: 10 } }).addTo(map).start();
+    L.control.locate({
+        position: "bottomleft",
+        layer: current,
+        locateOptions: { maxZoom: 18 },
+        keepCurrentZoomLevel: false,
+        initialZoomLevel: 13,
+    }).addTo(map).start();
     restoreFavoritesByUrl(favorite);
 
     // 座標列全削除ボタン
@@ -162,26 +174,12 @@
         updateUrlWithFavorites(favorite)
     }).addTo(map);
 
-    //let first = true;
-
     // 現在位置検知時、その場所にマーカを表示
-    //function onLocationFound(e) {
-    //    updateCurrent(current, e.latlng, e.accuracy);
-    //    updateTrajectory(trajectory, e.latlng, 100);
-    //    if (first) {
-    //        map.setZoom(18)
-    //        map.panTo(e.latlng);
-    //        first = false;
-    //    }
-    //}
-    //// 検知失敗時、alert表示
-    //function onLocationError(e) {
-    //    //alert(e.message);
-    //}
+    map.on("locationfound", (e) => updateTrajectory(trajectory, e.latlng, 100));
+    // 検知失敗時、alert表示
+    map.on("locationerror", (e) => alert(e.message));
 
     // イベントハンドラ登録
-    //map.on("locationfound", onLocationFound);
-    //map.on("locationerror", onLocationError);
 
     // location検知要求
     //map.locate({
