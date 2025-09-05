@@ -10,6 +10,10 @@
         });
     }
 
+    function _trajectoryPoints(latlngs, n) {
+        return latlngs.toReversed().map((e, i) => _trajectoryMarker(e, (n - i) / n));
+    }
+
     function _trajectoryPolyline(latlngs, w) {
         return L.polyline(latlngs, {
             weight: w,
@@ -18,16 +22,14 @@
         });
     }
 
-    function updateTrajectory(g, latlng, n) {
+    function updateTrajectory(g_p, g_l, latlng, n) {
         // 現在位置情報を追加、移動軌跡を再描画
-        const latlngs = g.getLayers().slice(-(n - 1)).map((e) => e.getLatLng());
+        const latlngs = g_p.getLayers().slice(-(n - 1)).map((e) => e.getLatLng());
         latlngs.push(latlng);
-        g.clearLayers();
-        latlngs.toReversed().forEach((e, i) => {
-            const r = (n - i) / n;
-            _trajectoryMarker(e, r).addTo(g);
-        });
-        _trajectoryPolyline(latlngs, 2);
+        g_p.clearLayers();
+        _trajectoryPoints(latlngs, n).map((e) => e.addTo(g_p));
+        g_l.clearLayers();
+        _trajectoryPolyline(latlngs, 2).addTo(g_l);
     }
 
     const iconFavorite = L.AwesomeMarkers.icon({
@@ -121,34 +123,45 @@
     };
     // overlay レイヤ
     const current = L.layerGroup();
-    const trajectory = L.layerGroup();
+    const traj_p = L.layerGroup();
+    const traj_l = L.layerGroup();
     const favorite = L.layerGroup();
     // map 生成
     const map = L.map("map", {
-        layers: [ tiles.osm, current, trajectory, favorite ],
+        layers: [ tiles.osm, current, traj_p, traj_l, favorite ],
         center: L.latLng(35.6251316, 139.7219512),
         zoomControl: false,
         zoom: 16,
         minZoom: 12,
     }).fitWorld();
-    L.control.layers(tiles, { current, trajectory, favorite }).addTo(map);
+    L.control.layers(tiles, { current, traj_p, traj_l, favorite }).addTo(map);
     L.control.scale({imperial: false}).addTo(map);
     L.control.locate({
         position: "bottomleft",
         layer: current,
-        locateOptions: { maxZoom: 18 },
+        locateOptions: {
+            maxZoom: 18,
+            enableHighAccuracy: true,
+        },
         keepCurrentZoomLevel: false,
         initialZoomLevel: 13,
+        //circleStyle: {
+        //    stroke: true,
+        //    weight: 1,
+        //    opacity: 0.3,
+        //    fillOpacity: 0.02,
+        //},
     }).addTo(map).start();
     restoreFavoritesByUrl(favorite);
 
     // 座標列全削除ボタン
     L.easyButton("fa-solid fa-ban", () => {
-        if (favorite.getLayers().length === 0 && trajectory.getLayers().length === 0) return;
+        if (favorite.getLayers().length === 0 && traj_p.getLayers().length === 0) return;
         const result = confirm("remove all favorite and trajectory");
         if (result) {
             favorite.clearLayers();
-            trajectory.clearLayers();
+            traj_p.clearLayers();
+            traj_l.clearLayers();
         }
     }).addTo(map);
     // favorite 追加ボタン
@@ -175,9 +188,9 @@
     }).addTo(map);
 
     // 現在位置検知時、その場所にマーカを表示
-    map.on("locationfound", (e) => updateTrajectory(trajectory, e.latlng, 100));
+    map.on("locationfound", (e) => updateTrajectory(traj_p, traj_l, e.latlng, 100));
     // 検知失敗時、alert表示
-    map.on("locationerror", (e) => alert(e.message));
+    //map.on("locationerror", (e) => alert(e.message));
 
     // イベントハンドラ登録
 
