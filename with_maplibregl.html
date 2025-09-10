@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="utf-8">
+	<title>MapLibre Pot Marking</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- MapLibre GL JS
+	cf. https://maplibre.org/maplibre-gl-js/docs/
+	-->
+	<link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
+	<script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+
+	<!-- font awesome
+	cf. https://fontawesome.com/search?q=location&ic=free
+	-->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+		integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+
+	<script src="js/polyline_encoding.js"></script>
+
+	<style>
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+		}
+
+		#map {
+			height: 100%;
+			width: 100%;
+		}
+
+		#controls {
+			position: absolute;
+			top: 10px;
+			left: 10px;
+			background: rgba(255, 255, 255, 0.2);
+			padding: 6px;
+			border-radius: 6px;
+			box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+			z-index: 10;
+
+			button {
+				color: rgb(64, 64, 255);
+				border-color: rgb(64, 64, 255);
+				font-size: 18px;
+				padding: 3px;
+				background: rgba(255, 255, 255, 0.4);
+			}
+		}
+
+		button {
+			margin: 2px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="map"></div>
+	<div id="controls">
+		<button id="clearTrajBtn" title="軌跡削除"><i class="fa-solid fa-eraser"></i></button>
+		<button id="addFavBtn" title="お気に入り追加"><i class="fa-solid fa-thumbtack"></i></button>
+		<button id="delFavBtn" title="お気に入り削除"><i class="fa-solid fa-delete-left"></i></button>
+		<button id="saveUrlBtn" title="URL保存"><i class="fa-solid fa-bookmark"></i></button>
+	</div>
+
+	<script src="js/with_maplibregl.js?v=0"></script>
+</body>
+
+</html>
