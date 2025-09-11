@@ -12,6 +12,9 @@
 	<link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet" />
 	<script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
 
+	<!-- MapLibre GL JS + Google Maps -->
+	<script src="https://cdn.jsdelivr.net/npm/maplibre-google-maps/index.min.js"></script>
+	
 	<!-- turf
 	cf. https://maplibre.org/maplibre-gl-js/docs/examples/draw-a-circle/
 	-->
@@ -66,8 +69,8 @@
 			left: 10px;
 		}
 		.controls.lb {
-			bottom: 10px;
-			left: 120px;
+			bottom: 100px;
+			left: 10px;
 		}
 		.controls.cb {
 			bottom: 10px;
@@ -79,14 +82,22 @@
 			margin: 2px;
 		}
 
+		/* お気に入りマーカーを地図上の他の要素より前面に表示 */
 		.favorite-marker {
 			z-index: 10;
+		}
+		/* ユーザー位置の精度円をクリック不可にする */
+		.maplibregl-user-location-accuracy-circle {
+			pointer-events: none;
+			background-color: #1da1f210;
 		}
 	</style>
 </head>
 
 <body>
+	<!-- 地図表示エリア -->
 	<div id="map"></div>
+	<!-- 各種操作ボタン -->
 	<div class="controls lt">
 		<button id="saveUrlBtn" title="URL保存"><i class="fa-solid fa-bookmark"></i></button>
 		<button id="clearTrajBtn" title="軌跡削除"><i class="fa-solid fa-eraser"></i></button>

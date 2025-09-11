@@ -210,7 +210,7 @@
    */
   const geolocate = new maplibregl.GeolocateControl({
     positionOptions: { enableHighAccuracy: true },
-    showAccuracyCircle: false,
+    showAccuracyCircle: true,
     trackUserLocation: true,
   });
 
