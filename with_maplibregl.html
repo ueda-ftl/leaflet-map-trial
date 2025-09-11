@@ -9,8 +9,13 @@
 	<!-- MapLibre GL JS
 	cf. https://maplibre.org/maplibre-gl-js/docs/
 	-->
-	<link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
-	<script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+	<link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet" />
+	<script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
+
+	<!-- turf
+	cf. https://maplibre.org/maplibre-gl-js/docs/examples/draw-a-circle/
+	-->
+	<script src="https://cdn.jsdelivr.net/npm/@turf/turf/turf.min.js"></script>
 
 	<!-- font awesome
 	cf. https://fontawesome.com/search?q=location&ic=free
@@ -33,10 +38,8 @@
 			width: 100%;
 		}
 
-		#controls {
+		.controls {
 			position: absolute;
-			top: 10px;
-			left: 10px;
 			background: rgba(255, 255, 255, 0.2);
 			padding: 6px;
 			border-radius: 6px;
@@ -49,22 +52,50 @@
 				font-size: 18px;
 				padding: 3px;
 				background: rgba(255, 255, 255, 0.4);
+
 			}
+			#addFavBtn {
+				color: red;
+				border-color: red;
+				font-size: 32px;
+				width: 80px;
+			}
+		}
+		.controls.lt {
+			top: 10px;
+			left: 10px;
+		}
+		.controls.lb {
+			bottom: 10px;
+			left: 120px;
+		}
+		.controls.cb {
+			bottom: 10px;
+			left: 50%;
+			transform: translateX(-50%);
 		}
 
 		button {
 			margin: 2px;
+		}
+
+		.favorite-marker {
+			z-index: 10;
 		}
 	</style>
 </head>
 
 <body>
 	<div id="map"></div>
-	<div id="controls">
-		<button id="clearTrajBtn" title="軌跡削除"><i class="fa-solid fa-eraser"></i></button>
-		<button id="addFavBtn" title="お気に入り追加"><i class="fa-solid fa-thumbtack"></i></button>
-		<button id="delFavBtn" title="お気に入り削除"><i class="fa-solid fa-delete-left"></i></button>
+	<div class="controls lt">
 		<button id="saveUrlBtn" title="URL保存"><i class="fa-solid fa-bookmark"></i></button>
+		<button id="clearTrajBtn" title="軌跡削除"><i class="fa-solid fa-eraser"></i></button>
+	</div>
+	<div class="controls lb">
+		<button id="delFavBtn" title="お気に入り削除"><i class="fa-solid fa-delete-left"></i></button>
+	</div>
+	<div class="controls cb">
+		<button id="addFavBtn" title="お気に入り追加"><i class="fa-solid fa-thumbtack"></i></button>
 	</div>
 
 	<script src="js/with_maplibregl.js?v=0"></script>
