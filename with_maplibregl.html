@@ -12,9 +12,6 @@
 	<link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet" />
 	<script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
 
-	<!-- MapLibre GL JS + Google Maps -->
-	<script src="https://cdn.jsdelivr.net/npm/maplibre-google-maps/index.min.js"></script>
-	
 	<!-- turf
 	cf. https://maplibre.org/maplibre-gl-js/docs/examples/draw-a-circle/
 	-->
@@ -54,42 +51,79 @@
 				border-color: rgb(64, 64, 255);
 				font-size: 18px;
 				padding: 3px;
+				margin: 2px;
 				background: rgba(255, 255, 255, 0.4);
-
 			}
+
+			button:disabled {
+				cursor: not-allowed;
+				opacity: 0.3;
+			}
+
 			#addFavBtn {
 				color: red;
+				background-color: rgba(255, 128, 128, 0.3);
 				border-color: red;
 				font-size: 32px;
-				width: 80px;
 			}
 		}
+
 		.controls.lt {
 			top: 10px;
 			left: 10px;
 		}
+
 		.controls.lb {
-			bottom: 100px;
+			bottom: 70px;
 			left: 10px;
 		}
+
 		.controls.cb {
 			bottom: 10px;
 			left: 50%;
 			transform: translateX(-50%);
 		}
 
-		button {
-			margin: 2px;
-		}
-
 		/* お気に入りマーカーを地図上の他の要素より前面に表示 */
 		.favorite-marker {
 			z-index: 10;
 		}
+
 		/* ユーザー位置の精度円をクリック不可にする */
 		.maplibregl-user-location-accuracy-circle {
 			pointer-events: none;
 			background-color: #1da1f210;
+		}
+
+		/* コントロールの背景を半透明に */
+		.maplibregl-ctrl-group {
+			background: rgba(255, 255, 255, 0.4);
+		}
+
+		#toast {
+			position: absolute;
+			left: 10px;
+			top: 60px;
+			background: rgba(0, 0, 0, 0.8);
+			color: #fff;
+			padding: 6px 12px;
+			border-radius: 6px;
+		}
+		#toast.hide {
+			display: none;
+		}
+
+		#basemap_select {
+			position: absolute;
+			top: 10px;
+			right: 48px;
+			background: rgba(255, 255, 255, 0.5);
+			padding: 4px;
+			border-radius: 4px;
+		}
+
+		.maplibregl-ctrl-scale {
+			background: rgba(255, 255, 255, 0.1);
 		}
 	</style>
 </head>
@@ -97,9 +131,15 @@
 <body>
 	<!-- 地図表示エリア -->
 	<div id="map"></div>
+
+	<div id="basemap-control">
+		<select id="basemap_select"></select>
+	</div>
+
 	<!-- 各種操作ボタン -->
 	<div class="controls lt">
 		<button id="saveUrlBtn" title="URL保存"><i class="fa-solid fa-bookmark"></i></button>
+		<button id="downloadCsvBtn" title="CSV保存"><i class="fa-solid fa-file-csv"></i></button>
 		<button id="clearTrajBtn" title="軌跡削除"><i class="fa-solid fa-eraser"></i></button>
 	</div>
 	<div class="controls lb">
@@ -109,7 +149,10 @@
 		<button id="addFavBtn" title="お気に入り追加"><i class="fa-solid fa-thumbtack"></i></button>
 	</div>
 
-	<script src="js/with_maplibregl.js?v=0.0.1"></script>
+	<!-- トースト表示エリア -->
+	<div id="toast" class="hide"></div>
+
+	<script src="js/with_maplibregl.js?v=0.0.2"></script>
 </body>
 
 </html>

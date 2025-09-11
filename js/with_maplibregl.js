@@ -2,6 +2,47 @@
   "use strict";
 
   /**
+   * 座標列をCSV文字列に変換
+   * @param {Array.<[number, number]>} latLngs 座標リスト
+   * @returns CSV文字列
+   */
+  function _latlngs_csv(latLngs) {
+    const header = "lat,lng";
+    const body = latLngs.map(e => e.join(",")).join("\n");
+    return header + "\n" + body;
+  }
+
+  /**
+   * 座標列をCSVとしてダウンロード[
+   * @param {String} filename ファイル名
+   * @param {Array.<[number, number]>} latLngs 座標リスト
+   */
+  function downloadCSV(filename, latLngs) {
+    // 
+    const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+    // リンク生成
+    const downloadLink = document.createElement("a");
+    downloadLink.download = filename;
+    // ファイル情報設定
+    const blob = new Blob([bom, _latlngs_csv(latLngs)]);
+    downloadLink.href = URL.createObjectURL(blob, { type: "text/csv" });
+    downloadLink.dataset.downloadurl = ["text/csv", downloadLink.download, downloadLink.href].join(":");
+    // イベント実行
+    downloadLink.click();
+  }
+
+  /**
+   * トースト表示
+   * @param {String} msg 表示メッセージ文字列
+   */
+  function showToast(msg) {
+    const el = document.getElementById("toast");
+    el.textContent = msg;
+    el.classList.remove("hide");
+    setTimeout(() => el.classList.add("hide"), 2500);
+  }
+
+  /**
    * お気に入り座標に対する近傍円の半径 [m]
    * @type {Number}
    */
@@ -13,17 +54,79 @@
    */
   const TRAJECTORY_POINTS_MAX = 100;
 
+  const getTileStyle = (() => {
+    const tileStyles = {
+      osm_vec: "https://tile.openstreetmap.jp/styles/osm-bright-ja/style.json",
+      gsi_vec: "https://gsi-cyberjapan.github.io/gsivectortile-mapbox-gl-js/pale.json",
+    };
+
+    const tileSources = {
+      osm: {
+        type: "raster",
+        tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+        tileSize: 256,
+        attribution: "© OpenStreetMap contributors"
+      },
+      gsi_std: {
+        type: "raster",
+        tiles: ["https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png"],
+        tileSize: 256,
+        attribution: "地理院タイル"
+      },
+      gsi_photo: {
+        type: "raster",
+        tiles: ["https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg"],
+        tileSize: 256,
+        attribution: "地理院タイル（航空写真）"
+      },
+      google: {
+        type: "raster",
+        tiles: ["https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"], // lyrs=m=地図, s=衛星, y=ハイブリッド
+        tileSize: 256,
+        attribution: "© Google"
+      },
+    };
+
+    document.getElementById("basemap_select").innerHTML = `
+        <option value="osm_vec" title="OpenStreetMap Vector">osm_vec</option>
+        <option value="gsi_vec" title="国土地理院 Vector">gsi_vec</option>
+        <option value="osm" title="OpenStreetMap">osm</option>
+        <option value="gsi_std" title="国土地理院 標準地図">gsi</option>
+        <option value="gsi_photo" title="国土地理院 航空写真">gsip</option>
+        <option value="google" title="Google Maps">gmap</option>
+    `;
+    function getTileStyle(sourceId) {
+      const style = tileStyles[sourceId];
+      if (style) {
+        return style;
+      }
+      return {
+        version: 8,
+        sources: tileSources,
+        layers: [{ id: "basemap", type: "raster", source: sourceId }]
+      };
+    }
+    return getTileStyle;
+  })();
+
   /**
    * Map オブジェクト
    * @type {maplibregl.Map}
    */
   const map = new maplibregl.Map({
     container: "map",
-    style: "https://tile.openstreetmap.jp/styles/osm-bright-ja/style.json",
+    style: getTileStyle("osm_vec"),
     center: [139.72195, 35.62513],
     zoom: 14,
     attributionControl: false,  // 既存Attributionを非表示
     maplibreLogo: true,
+  });
+
+  // タイル切り替え
+  document.getElementById("basemap_select").addEventListener("change", e => {
+    const sourceId = e.target.value;
+    const style = getTileStyle(sourceId);
+    map.setStyle(style);
   });
 
   /**
@@ -38,15 +141,18 @@
   function updateTrajectory() {
     const trajectorySource = map.getSource("trajectory");
     if (!trajectorySource) return;
+    const empty = trajectory.length === 0;
     const features = [];
-    if (trajectory.length > 0) {
+    if (!empty) {
       const coordinates = trajectory.slice(-TRAJECTORY_POINTS_MAX);
       features.push({
         type: "Feature",
         geometry: { type: "LineString", coordinates }
       });
     }
-    trajectorySource.setData({ type: "FeatureCollection", features});
+    trajectorySource.setData({ type: "FeatureCollection", features });
+    document.getElementById("clearTrajBtn").disabled = empty;
+    document.getElementById("addFavBtn").disabled = empty;
   }
 
   // GeoJSON ソース追加
@@ -69,7 +175,7 @@
           ["linear"],
           ["line-progress"],
           0, "cyan",
-          1, "green"   
+          1, "green"
         ],
       },
       layout: {
@@ -101,6 +207,10 @@
     restoreFromUrl();
     // 現在位置トラッキング開始
     geolocate.trigger();
+
+    // 初期表示更新
+    updateFavorites();
+    updateTrajectory();
   });
 
   /**
@@ -123,7 +233,6 @@
     marker.getElement().addEventListener("click", () => updateFavorites(marker));
     marker.on("drag", () => updateFavorites(marker));
     favorites.push(marker);
-    updateFavorites();
   }
 
   /**
@@ -141,12 +250,18 @@
     const features = [];
     favorites.toReversed().forEach((marker, index) => {
       marker.setOpacity(0.6);
-      const {lat, lng} = marker.getLngLat();
+      const { lat, lng } = marker.getLngLat();
       const circle = turf.circle([lng, lat], radius / 1000, { steps: 24, properties: { index } });
       features.push(circle);
     });
-    favorites.at(-1).setOpacity(0.8); // 最後のマーカーを強調
-    circleSource.setData({ type: "FeatureCollection", features});
+    const empty = favorites.length === 0;
+    if (!empty) {
+      // 最後のマーカーを強調
+      favorites.at(-1).setOpacity(0.8);
+    }
+    document.getElementById("delFavBtn").disabled = empty;
+    document.getElementById("downloadCsvBtn").disabled = empty;
+    circleSource.setData({ type: "FeatureCollection", features });
   }
 
   /**
@@ -164,12 +279,17 @@
    * お気に入りをURLクエリに保存
    */
   function saveUrl() {
-    if (favorites.length === 0) return;
-    const latLng = favorites.map(m => m.getLngLat()).map(p => [p.lat, p.lng]);
-    const encoded = encodePolyline(latLng);
     const params = new URLSearchParams(location.search);
-    params.set("fav", encoded);
-    history.replaceState(null, "", `${location.pathname}?${params.toString()}`);
+    if (favorites.length > 0) {
+      const latLngs = favorites.map(m => m.getLngLat()).map(p => [p.lat, p.lng]);
+      const encoded = encodePolyline(latLngs);
+      params.set("fav", encoded);
+      history.replaceState(null, "", `${location.pathname}?${params.toString()}`);
+      showToast("URLクエリにお気に入り座標を追加");
+    } else {
+      history.replaceState(null, "", location.pathname);
+      showToast("URLクエリをリセット");
+    }
   }
 
   /**
@@ -186,13 +306,22 @@
   // ボタン処理
   // document.getElementById("clearBtn").onclick = clearAll;
   document.getElementById("clearTrajBtn").onclick = () => {
-    trajectory.splice(0);
-    updateTrajectory();
+    if (trajectory.length > 0) {
+      trajectory.splice(0);
+      updateTrajectory();
+      showToast("軌跡をクリア");
+    } else {
+      showToast("軌跡が空");
+    }
   };
   document.getElementById("addFavBtn").onclick = () => {
-    if (trajectory.length === 0) return;
-    // 現在位置（軌跡の最後の座標）をお気に入りに追加
-    addFavorite(trajectory.at(-1));
+    if (trajectory.length > 0) {
+      // 現在位置（軌跡の最後の座標）をお気に入りに追加
+      addFavorite(trajectory.at(-1));
+      updateFavorites();
+    } else {
+      showToast("現在位置が不明");
+    }
   };
   document.getElementById("delFavBtn").onclick = () => {
     // お気に入りの最後のマーカーを削除
@@ -200,9 +329,19 @@
     if (m) {
       m.remove();
       updateFavorites();
+    } else {
+      showToast("お気に入りが空");
     }
   };
   document.getElementById("saveUrlBtn").onclick = saveUrl;
+  document.getElementById("downloadCsvBtn").onclick = () => {
+    if (favorites.length > 0) {
+      const latLngs = favorites.map(m => m.getLngLat()).map(p => [p.lat, p.lng]);
+      downloadCSV("favorites.csv", latLngs);
+    } else {
+      showToast("お気に入りが空");
+    }
+  };
 
   /**
    * 現在位置トラッキング用のコントロール
@@ -231,10 +370,9 @@
     trajectory.push(coord);
     // 軌跡更新
     updateTrajectory();
-    // 現在地を中心に
-    map.easeTo({ center: coord, zoom: 16, duration: 500 });
+    // map.easeTo({ center: coord, zoom: 16, duration: 500 });
   });
-  geolocate.on("error", (err) => {
+  geolocate.on("error", err => {
     console.warn("位置情報取得エラー", err);
   });
 
