@@ -1,0 +1,149 @@
+html,
+body {
+	height: 100%;
+	margin: 0;
+}
+
+#map {
+	height: 100%;
+	width: 100%;
+}
+
+.controls {
+	position: absolute;
+	display: flex;
+
+	/* background: rgba(255, 255, 255, 0.2); */
+	padding: 2px;
+	border-radius: 6px;
+	/* box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2); */
+	z-index: 10;
+
+	button {
+		width: fit-content;
+		height: fit-content;
+		padding: 3px;
+		margin: 2px;
+	}
+
+	button:disabled {
+		cursor: not-allowed;
+		opacity: 0.3;
+	}
+
+	.primary {
+		color: red;
+		background-color: rgba(255, 128, 128, 0.3);
+		border-color: red;
+		font-size: 32px;
+	}
+
+	.secondary {
+		color: rgb(64, 64, 255);
+		background-color: rgba(255, 255, 255, 0.3);
+		border-color: rgba(64, 64, 255, 0.3);
+		font-size: 18px;
+	}
+
+	.tertiary {
+		color: rgb(0, 128, 0);
+		background-color: rgba(255, 255, 255, 0.3);
+		border-color: rgba(0, 128, 0, 0.3);
+		font-size: 12px;
+	}
+
+	>div * {
+		font-size: 12px;
+	}
+
+	>table {
+		background-color: rgba(255, 255, 255, 0.2);
+		font-size: 12px;
+		color: magenta;
+
+		td:last-child {
+			text-align: right;
+		}
+	}
+
+	input[type="number"] {
+		background: transparent;
+		text-align: right;
+	}
+}
+
+.controls.lt {
+	flex-direction: column;
+	top: 10px;
+	left: 10px;
+}
+
+.controls.lb {
+	flex-direction: column;
+	bottom: 70px;
+	left: 10px;
+}
+
+.controls.rt {
+	flex-direction: column;
+	align-items: flex-end;
+	background-color: transparent;
+	box-shadow: none;
+	top: 10px;
+	right: 48px;
+}
+
+.controls.rb {
+	flex-direction: column;
+	align-items: flex-end;
+	bottom: 70px;
+	right: 10px;
+}
+
+.controls.cb {
+	flex-direction: row;
+	align-items: flex-end;
+	bottom: 10px;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+/* お気に入りマーカーを地図上の他の要素より前面に表示 */
+.favorite-marker {
+	z-index: 10;
+}
+
+/* ユーザー位置の精度円をクリック不可にする */
+.maplibregl-user-location-accuracy-circle {
+	pointer-events: none;
+	background-color: #1da1f210;
+}
+
+/* コントロールの背景を半透明に */
+.maplibregl-ctrl-group {
+	background: rgba(255, 255, 255, 0.4);
+}
+
+#toast {
+	position: absolute;
+	left: 10px;
+	top: 60px;
+	background: rgba(0, 0, 0, 0.8);
+	color: #fff;
+	padding: 6px 12px;
+	border-radius: 6px;
+}
+
+#toast.hide {
+	display: none;
+}
+
+#basemap_select {
+	background: rgba(255, 255, 255, 0.5);
+	padding: 4px;
+	border-radius: 4px;
+}
+
+.maplibregl-ctrl-scale {
+	background: rgba(255, 255, 255, 0.1);
+}

@@ -1,6 +1,9 @@
 (() => {
   "use strict";
 
+  const MAX_PITCH = 70;
+  const DEFAULT_PITCH = 60;
+
   /**
    * 座標列をCSV文字列に変換
    * @param {Array.<[number, number]>} latLngs 座標リスト
@@ -41,18 +44,6 @@
     el.classList.remove("hide");
     setTimeout(() => el.classList.add("hide"), 2500);
   }
-
-  /**
-   * お気に入り座標に対する近傍円の半径 [m]
-   * @type {Number}
-   */
-  const FAVORITE_RADIUS = 30;
-
-  /**
-   * 軌跡の最大表示点数
-   * @type {Number}
-   */
-  const TRAJECTORY_POINTS_MAX = 100;
 
   const getTileStyle = (() => {
     const tileStyles = {
@@ -120,7 +111,46 @@
     zoom: 14,
     attributionControl: false,  // 既存Attributionを非表示
     maplibreLogo: true,
+    maxPitch: MAX_PITCH,
+    pitch: DEFAULT_PITCH,
   });
+
+  /** ズーム更新イベント対応 */
+  function onUpdatedZoom() {
+    const zoom = map.getZoom();
+    // 値表示
+    document.getElementById("v_zoom").textContent = zoom.toFixed(1);
+  }
+  /** 傾斜更新イベント対応 */
+  function onUpdatedPitch() {
+    const pitch = map.getPitch();
+    // 値表示
+    document.getElementById("v_pitch").textContent = pitch.toFixed(0);
+    // ボタン無効化切替
+    document.getElementById("addPitch").disabled = pitch >= MAX_PITCH;
+    document.getElementById("subPitch").disabled = pitch <= 0;
+  }
+  /** 軌跡更新イベント対応 */
+  function onUpdatedTrajectory() {
+    const n = trajectory.length;
+    // 値表示
+    document.getElementById("n_traj").textContent = n;
+    // ボタン無効化切替
+    document.getElementById("clearTrajBtn").disabled = n === 0;
+    document.getElementById("addFavBtn").disabled = n === 0;
+  }
+  /** お気に入り更新イベント対応 */
+  function onUpdatedFavorite() {
+    const n = favorites.length;
+    if (document.getElementById("lockFav").checked) {
+      document.getElementById("delFavBtn").disabled = true;
+      document.getElementById("downloadCsvBtn").disabled = true;
+    } else {
+      document.getElementById("delFavBtn").disabled = n === 0;
+      document.getElementById("downloadCsvBtn").disabled = n === 0;
+    }
+    document.getElementById("n_fav").textContent = n;
+  }
 
   // タイル切り替え
   document.getElementById("basemap_select").addEventListener("change", e => {
@@ -128,6 +158,17 @@
     const style = getTileStyle(sourceId);
     map.setStyle(style);
   });
+
+  document.getElementById("addPitch").onclick = () => {
+    const pitch_old = map.getPitch();
+    const pitch = Math.min(pitch_old + 5 * Math.cos(pitch_old * Math.PI / 180), MAX_PITCH);
+    map.easeTo({ pitch, duration: 500 });
+  };
+  document.getElementById("subPitch").onclick = () => {
+    const pitch_old = map.getPitch();
+    const pitch = Math.max(pitch_old - 5 * Math.cos(pitch_old * Math.PI / 180), 0);
+    map.easeTo({ pitch, duration: 500 });
+  };
 
   /**
    * 軌跡
@@ -141,18 +182,17 @@
   function updateTrajectory() {
     const trajectorySource = map.getSource("trajectory");
     if (!trajectorySource) return;
-    const empty = trajectory.length === 0;
-    const features = [];
-    if (!empty) {
-      const coordinates = trajectory.slice(-TRAJECTORY_POINTS_MAX);
-      features.push({
-        type: "Feature",
-        geometry: { type: "LineString", coordinates }
+    if (trajectory.length === 0) {
+      trajectorySource.setData({ type: "FeatureCollection", features: [] });
+    } else {
+      trajectorySource.setData({
+        type: "FeatureCollection", features: [{
+          type: "Feature",
+          geometry: { type: "LineString", coordinates: trajectory.slice(0) }
+        }]
       });
     }
-    trajectorySource.setData({ type: "FeatureCollection", features });
-    document.getElementById("clearTrajBtn").disabled = empty;
-    document.getElementById("addFavBtn").disabled = empty;
+    onUpdatedTrajectory();
   }
 
   // GeoJSON ソース追加
@@ -209,9 +249,13 @@
     geolocate.trigger();
 
     // 初期表示更新
+    onUpdatedZoom();
+    onUpdatedPitch();
     updateFavorites();
     updateTrajectory();
   });
+  map.on("zoom", onUpdatedZoom);
+  map.on("pitch", onUpdatedPitch);
 
   /**
    * お気に入り
@@ -230,7 +274,7 @@
       className: "favorite-marker",
     }).setLngLat(lngLat).addTo(map);
     // クリックした or ドラッグしているマーカーをお気に入りリストの最後に移動
-    marker.getElement().addEventListener("click", () => updateFavorites(marker));
+    marker.getElement().onclick = () => updateFavorites(marker);
     marker.on("drag", () => updateFavorites(marker));
     favorites.push(marker);
   }
@@ -244,7 +288,7 @@
       favorites.splice(idx, 1);
       favorites.push(markerFocused);
     }
-    const radius = FAVORITE_RADIUS;
+    const radius = parseInt(document.getElementById("fav_radius").value) || 40;
     const circleSource = map.getSource("favorite-area");
     if (!circleSource) return;
     const features = [];
@@ -259,10 +303,15 @@
       // 最後のマーカーを強調
       favorites.at(-1).setOpacity(0.8);
     }
-    document.getElementById("delFavBtn").disabled = empty;
-    document.getElementById("downloadCsvBtn").disabled = empty;
     circleSource.setData({ type: "FeatureCollection", features });
+    onUpdatedFavorite();
   }
+
+
+  document.getElementById("fav_radius").addEventListener("change", e => {
+    updateFavorites();
+  });
+
 
   /**
    * 全削除
@@ -342,6 +391,9 @@
       showToast("お気に入りが空");
     }
   };
+  document.getElementById("lockFav").addEventListener("change", (e) => {
+    const locked = e.target.checked;
+  });
 
   /**
    * 現在位置トラッキング用のコントロール
