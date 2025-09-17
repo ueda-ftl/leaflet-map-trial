@@ -115,11 +115,20 @@
     pitch: DEFAULT_PITCH,
   });
 
+  function isLockedFav() {
+    return document.getElementById("lockFav").checked;
+  }
+
   /** ズーム更新イベント対応 */
   function onUpdatedZoom() {
     const zoom = map.getZoom();
     // 値表示
     document.getElementById("v_zoom").textContent = zoom.toFixed(1);
+  }
+  /** 方位変更イベント対応 */
+  function onUpdatedBearing() {
+    const bearing = map.getBearing();
+    document.getElementById("v_bearing").textContent = bearing.toFixed(0);
   }
   /** 傾斜更新イベント対応 */
   function onUpdatedPitch() {
@@ -132,24 +141,25 @@
   }
   /** 軌跡更新イベント対応 */
   function onUpdatedTrajectory() {
-    const n = trajectory.length;
+    const nTraj = trajectory.length;
+    const locked = isLockedFav();
     // 値表示
-    document.getElementById("n_traj").textContent = n;
+    document.getElementById("n_traj").textContent = nTraj;
     // ボタン無効化切替
-    document.getElementById("clearTrajBtn").disabled = n === 0;
-    document.getElementById("addFavBtn").disabled = n === 0;
+    document.getElementById("clearTraj").disabled = nTraj === 0;
+    document.getElementById("addFavBtn").disabled = locked || nTraj === 0;
   }
   /** お気に入り更新イベント対応 */
   function onUpdatedFavorite() {
-    const n = favorites.length;
-    if (document.getElementById("lockFav").checked) {
-      document.getElementById("delFavBtn").disabled = true;
-      document.getElementById("downloadCsvBtn").disabled = true;
-    } else {
-      document.getElementById("delFavBtn").disabled = n === 0;
-      document.getElementById("downloadCsvBtn").disabled = n === 0;
-    }
-    document.getElementById("n_fav").textContent = n;
+    const nFav = favorites.length;
+    const nTraj = trajectory.length;
+    const locked = isLockedFav();
+    // 値表示
+    document.getElementById("n_fav").textContent = nFav;
+    // ボタン無効化切替
+    document.getElementById("addFavBtn").disabled = locked || nTraj === 0;
+    document.getElementById("delFavBtn").disabled = locked || nFav === 0;
+    document.getElementById("downloadCsvBtn").disabled = nFav === 0;
   }
 
   // タイル切り替え
@@ -159,15 +169,23 @@
     map.setStyle(style);
   });
 
+  document.getElementById("rotateRight").onclick = () => {
+    const bearing = map.getBearing() - 5;
+    map.easeTo({ bearing, duration: 200 });
+  }
+  document.getElementById("rotateLeft").onclick = () => {
+    const bearing = map.getBearing() + 5;
+    map.easeTo({ bearing, duration: 200 });
+  }
   document.getElementById("addPitch").onclick = () => {
     const pitch_old = map.getPitch();
     const pitch = Math.min(pitch_old + 5 * Math.cos(pitch_old * Math.PI / 180), MAX_PITCH);
-    map.easeTo({ pitch, duration: 500 });
+    map.easeTo({ pitch, duration: 200 });
   };
   document.getElementById("subPitch").onclick = () => {
     const pitch_old = map.getPitch();
     const pitch = Math.max(pitch_old - 5 * Math.cos(pitch_old * Math.PI / 180), 0);
-    map.easeTo({ pitch, duration: 500 });
+    map.easeTo({ pitch, duration: 200 });
   };
 
   /**
@@ -250,11 +268,13 @@
 
     // 初期表示更新
     onUpdatedZoom();
+    onUpdatedBearing();
     onUpdatedPitch();
     updateFavorites();
     updateTrajectory();
   });
   map.on("zoom", onUpdatedZoom);
+  map.on("rotate", onUpdatedBearing)
   map.on("pitch", onUpdatedPitch);
 
   /**
@@ -270,7 +290,7 @@
   function addFavorite(lngLat) {
     const marker = new maplibregl.Marker({
       color: "red",
-      draggable: true,
+      draggable: !isLockedFav(),
       className: "favorite-marker",
     }).setLngLat(lngLat).addTo(map);
     // クリックした or ドラッグしているマーカーをお気に入りリストの最後に移動
@@ -292,14 +312,15 @@
     const circleSource = map.getSource("favorite-area");
     if (!circleSource) return;
     const features = [];
+    const locked = isLockedFav();
     favorites.toReversed().forEach((marker, index) => {
-      marker.setOpacity(0.6);
+      marker.setOpacity(locked ? 0.4 : 0.6);
       const { lat, lng } = marker.getLngLat();
       const circle = turf.circle([lng, lat], radius / 1000, { steps: 24, properties: { index } });
       features.push(circle);
     });
     const empty = favorites.length === 0;
-    if (!empty) {
+    if (!empty && !locked) {
       // 最後のマーカーを強調
       favorites.at(-1).setOpacity(0.8);
     }
@@ -318,10 +339,12 @@
    */
   function clearAll() {
     favorites.forEach(m => m.remove());
-    favorites.splice(0);
+    if (!isLockedFav()) {
+      favorites.splice(0);
+      updateFavorites();
+    }
     trajectory.splice(0);
     updateTrajectory();
-    updateFavorites();
   }
 
   /**
@@ -353,6 +376,10 @@
   }
 
   // ボタン処理
+  document.getElementById("resetView").onclick = () => {
+    map.easeTo({ center: trajectory.at(-1), zoom: 18, bearing: 0, pitch : MAX_PITCH, duration: 500 });
+    document.getElementById("fav_radius").value = 40;
+  }
   // document.getElementById("clearBtn").onclick = clearAll;
   document.getElementById("clearTrajBtn").onclick = () => {
     if (trajectory.length > 0) {
@@ -364,6 +391,7 @@
     }
   };
   document.getElementById("addFavBtn").onclick = () => {
+    if (isLockedFav()) return;
     if (trajectory.length > 0) {
       // 現在位置（軌跡の最後の座標）をお気に入りに追加
       addFavorite(trajectory.at(-1));
@@ -373,6 +401,7 @@
     }
   };
   document.getElementById("delFavBtn").onclick = () => {
+    if (isLockedFav()) return;
     // お気に入りの最後のマーカーを削除
     const m = favorites.pop();
     if (m) {
@@ -391,8 +420,10 @@
       showToast("お気に入りが空");
     }
   };
-  document.getElementById("lockFav").addEventListener("change", (e) => {
-    const locked = e.target.checked;
+  document.getElementById("lockFav").addEventListener("change", () => {
+    const draggable = !isLockedFav();
+    favorites.forEach(e => e.setDraggable(draggable));
+    updateFavorites();
   });
 
   /**
@@ -410,7 +441,10 @@
   // - スケール表示
   // - ズーム・回転操作
   // - 現在位置トラッキング
-  map.addControl(new maplibregl.AttributionControl({ compact: true }));
+  map.addControl(new maplibregl.AttributionControl({
+    compact: true,
+    customAttribution: '<a href="https://github.com/ueda-ftl/geolocation-trial">github</a>',
+  }));
   map.addControl(new maplibregl.ScaleControl({ unit: "metric" }));
   map.addControl(new maplibregl.NavigationControl());
   map.addControl(geolocate);
@@ -422,7 +456,6 @@
     trajectory.push(coord);
     // 軌跡更新
     updateTrajectory();
-    // map.easeTo({ center: coord, zoom: 16, duration: 500 });
   });
   geolocate.on("error", err => {
     console.warn("位置情報取得エラー", err);

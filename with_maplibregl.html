@@ -41,14 +41,23 @@
 		<div id="basemap-control">
 			<select id="basemap_select"></select>
 		</div>
-		<button id="addPitch" class="ternary" title="傾斜+"><i class="fa-solid fa-slash"></i></button>
-		<button id="subPitch" class="ternary" title="傾斜-"><i class="fa-solid fa-slash"
-				style="text-decoration: line-through solid 3px;"></i></i></button>
+		<div>
+			<button id="addPitch" class="tertiary" title="傾斜+"><i class="fa-solid fa-slash"></i></button>
+			<button id="subPitch" class="tertiary" title="傾斜-"><i class="fa-solid fa-minus"></i></button>
+		</div>
+		<div>
+			<button id="rotateRight" class="tertiary" title="時計回り"><i class="fa-solid fa-rotate-right"></i></button>
+			<button id="rotateLeft" class="tertiary" title="反時計回り"><i class="fa-solid fa-rotate-left"></i></button>
+		</div>
 		<table>
 			<tbody>
 				<tr>
 					<td>zoom</td>
 					<td id="v_zoom"></td>
+				</tr>
+				<tr>
+					<td>bear</td>
+					<td id="v_bearing"></td>
 				</tr>
 				<tr>
 					<td>pitch</td>
@@ -76,15 +85,19 @@
 		<button id="delFavBtn" class="secondary" title="お気に入り削除"><i class="fa-solid fa-delete-left"></i></button>
 		<button id="addFavBtn" class="primary" title="お気に入り追加"><i class="fa-solid fa-thumbtack"></i></button>
 		<span class="secondary">
-			<input id="lockFav" type="checkbox" checked />
-			<label for="lockFav"><i class="fa-solid fa-lock"></i></label>
+			<i class="fa-solid fa-lock-open" style="margin: 0 -3px 0 5px;"></i>
+			<input id="lockFav" type="checkbox" class="toggle-checkbox" checked />
+			<label for="lockFav" class="toggle-label"></label>
 		</span>
+	</div>
+	<div class="controls rb">
+		<button id="resetView" class="secondary" title="既定の表示状態"><i class="fa-solid fa-street-view"></i></button>
 	</div>
 
 	<!-- トースト表示エリア -->
 	<div id="toast" class="hide"></div>
 
-	<script src="js/with_maplibregl.js?v=0.0.3"></script>
+	<script src="js/with_maplibregl.js?v=0.1.0"></script>
 </body>
 
 </html>
