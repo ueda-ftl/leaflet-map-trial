@@ -139,6 +139,9 @@
   function isEditableFav() {
     return document.getElementById("editableFav").checked;
   }
+  function isLockMap() {
+    return document.getElementById("lockMap").checked;
+  }
 
   /** ズーム更新イベント対応 */
   function onUpdatedZoom() {
@@ -196,38 +199,47 @@
   });
 
   document.getElementById("rotateRight").onclick = () => {
+    if (isLockMap()) return;
     const bearing = map.getBearing() - 5;
     map.easeTo({ bearing, duration: 200 });
   }
   document.getElementById("rotateLeft").onclick = () => {
+    if (isLockMap()) return;
     const bearing = map.getBearing() + 5;
     map.easeTo({ bearing, duration: 200 });
   }
   document.getElementById("rotateN").onclick = () => {
+    if (isLockMap()) return;
     map.easeTo({ bearing: 0, duration: 200 });
   }
   document.getElementById("rotateS").onclick = () => {
+    if (isLockMap()) return;
     map.easeTo({ bearing: 180, duration: 200 });
   }
   document.getElementById("rotateE").onclick = () => {
+    if (isLockMap()) return;
     map.easeTo({ bearing: 90, duration: 200 });
   }
   document.getElementById("rotateW").onclick = () => {
+    if (isLockMap()) return;
     map.easeTo({ bearing: -90, duration: 200 });
   }
   document.getElementById("addPitch").onclick = () => {
+    if (isLockMap()) return;
     const pitch_old = map.getPitch();
     const d = pitch_old >= 60 ? 1 : 5 * Math.cos(pitch_old * Math.PI / 180);
     const pitch = Math.min(pitch_old + d, MAX_PITCH);
     map.easeTo({ pitch, duration: 200 });
   };
   document.getElementById("subPitch").onclick = () => {
+    if (isLockMap()) return;
     const pitch_old = map.getPitch();
     const d = pitch_old >= 60 ? 1 : 5 * Math.cos(pitch_old * Math.PI / 180);
     const pitch = Math.max(pitch_old - d, 0);
     map.easeTo({ pitch, duration: 200 });
   };
   document.getElementById("zeroPitch").onclick = () => {
+    if (isLockMap()) return;
     map.easeTo({ pitch: 0, duration: 200 });
   };
 
@@ -369,7 +381,6 @@
   }
 
   map.on("load", () => {
-    console.log("load");
     // 現在位置トラッキング開始
     geolocate.trigger();
 
@@ -487,6 +498,7 @@
 
   // ボタン処理
   document.getElementById("resetView").onclick = () => {
+    if (isLockMap()) return;
     map.easeTo({ center: trajectory.at(-1), zoom: 18, bearing: 0, pitch: DEFAULT_PITCH, duration: 500 });
     document.getElementById("fav_radius").value = 40;
   }
@@ -534,6 +546,23 @@
     const draggable = isEditableFav();
     favorites.forEach(e => e.setDraggable(draggable));
     updateFavorites();
+  });
+  document.getElementById("lockMap").addEventListener("change", () => {
+    const locked = isLockMap();
+    const handlers = [
+      map.doubleClickZoom,
+      map.dragPan,
+      map.dragRotate,
+      map.keyboard,
+      map.scrollZoom,
+      map.touchPitch,
+      map.touchZoomRotate,
+    ];
+    if (locked) {
+      handlers.forEach(e => e.disable());
+    } else {
+      handlers.forEach(e => e.enable());
+    }
   });
 
   /**

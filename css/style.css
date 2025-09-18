@@ -97,7 +97,7 @@ body {
 	top: 10px;
 	right: 48px;
 
-	> div > button{
+	>div>button {
 		margin: -2px;
 	}
 }
@@ -194,6 +194,24 @@ body {
 /* チェック時のデザイン */
 .toggle-checkbox:checked+.toggle-label {
 	background-color: #44f8;
+}
+
+.primary {
+	.toggle-checkbox:checked+.toggle-label {
+		background-color: #f008;
+	}
+}
+
+.secondary {
+	.toggle-checkbox:checked+.toggle-label {
+		background-color: rgba(64, 64, 255, 0.5);
+	}
+}
+
+.tertiary {
+	.toggle-checkbox:checked+.toggle-label {
+		background-color: rgba(0, 128, 0, 0.5);
+	}
 }
 
 .toggle-checkbox:checked+.toggle-label::after {
