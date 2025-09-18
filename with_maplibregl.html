@@ -24,9 +24,6 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
 		integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
-
-	<link rel="stylesheet" href="css/style.css?v=0.2.0">
-	<script src="js/polyline_encoding.js?v=0.2.0"></script>
 </head>
 
 <body>
@@ -35,16 +32,13 @@
 
 	<!-- 各種操作ボタン -->
 	<div class="controls lt">
-		<button id="clearTrajBtn" class="secondary" title="軌跡削除"><i class="fa-solid fa-eraser"></i></button>
-	</div>
-	<div class="controls rt">
 		<div>
 			<select id="basemapSelect">
-				<option value="osm" title="OpenStreetMap">osm</option>
+				<option value="osm" title="OpenStreetMap" selected>osm</option>
 				<option value="gsi_std" title="国土地理院 標準地図">gsi</option>
 				<option value="gsi_photo" title="国土地理院 航空写真">gsip</option>
 				<option value="google" title="Google Maps">gmap</option>
-				<option value="osm.3d" title="OpenStreetMap + Plateau" selected>osm+3D</option>
+				<option value="osm.3d" title="OpenStreetMap + Plateau">osm+3D</option>
 				<option value="gsi_std.3d" title="国土地理院 標準地図 + Plateau">gsi+3D</option>
 				<option value="gsi_photo.3d" title="国土地理院 航空写真 + Plateau">gsip+3D</option>
 				<option value="google.3d" title="Google Maps + Plateau">gmap+3D</option>
@@ -52,10 +46,17 @@
 				<option value="gsi.vec" title="国土地理院 Vector">gsi_vec</option>
 			</select>
 		</div>
+		<button id="clearTrajBtn" class="secondary" title="軌跡削除"><i class="fa-solid fa-eraser"></i></button>
+	</div>
+	<div class="controls rt">
 		<div>
 			<span id="v_bearing" class="value"></span>
 			<button id="rotateRight" class="tertiary" title="時計回り"><i class="fa-solid fa-rotate-right"></i></button>
 			<button id="rotateLeft" class="tertiary" title="反時計回り"><i class="fa-solid fa-rotate-left"></i></button>
+			<button id="rotateN" class="tertiary" title="北"><i class="fa-solid fa-n"></i></button>
+			<button id="rotateS" class="tertiary" title="南"><i class="fa-solid fa-s"></i></button>
+			<button id="rotateW" class="tertiary" title="西"><i class="fa-solid fa-w"></i></button>
+			<button id="rotateE" class="tertiary" title="東"><i class="fa-solid fa-e"></i></button>
 			<i class="fa-solid fa-rotate"></i>
 		</div>
 		<div>
@@ -81,31 +82,44 @@
 				</tr>
 			</tbody>
 		</table>
+		<button id="resetView" class="secondary" title="既定の表示状態"><i class="fa-solid fa-street-view"></i></button>
 	</div>
 	<div class="controls lb">
+	</div>
+	<div class="controls cb">
+		<button id="delFavBtn" class="secondary" title="お気に入り削除"><i class="fa-solid fa-delete-left"></i></button>
+		<button id="addFavBtn" class="primary" title="お気に入り追加"><i class="fa-solid fa-thumbtack"></i></button>
+	</div>
+	<div class="controls rb">
 		<button id="saveUrlBtn" class="secondary" title="URL保存"><i class="fa-solid fa-bookmark"></i></button>
 		<button id="downloadCsvBtn" class="secondary" title="CSV保存"><i class="fa-solid fa-file-csv"></i></button>
 		<div>
 			<input type="number" id="fav_radius" min="5" max="300" step="1" value="40" style="width:3em;">m
 		</div>
-	</div>
-	<div class="controls cb">
-		<button id="delFavBtn" class="secondary" title="お気に入り削除"><i class="fa-solid fa-delete-left"></i></button>
-		<button id="addFavBtn" class="primary" title="お気に入り追加"><i class="fa-solid fa-thumbtack"></i></button>
 		<span class="secondary">
 			<input id="editableFav" type="checkbox" class="toggle-checkbox" />
 			<label for="editableFav" class="toggle-label"></label>
-			<i class="fa-solid fa-lock-open" style="margin: 0 -3px 0 5px;" onclick="document.getElementById('editableFav').click();"></i>
+			<i class="fa-solid fa-lock-open" style="margin: 0 5px 0 -3px;"
+				onclick="document.getElementById('editableFav').click();"></i>
 		</span>
-	</div>
-	<div class="controls rb">
-		<button id="resetView" class="secondary" title="既定の表示状態"><i class="fa-solid fa-street-view"></i></button>
 	</div>
 
 	<!-- トースト表示エリア -->
 	<div id="toast" class="hide"></div>
 
-	<script src="js/with_maplibregl.js?v=0.2.0"></script>
+	<script>
+		(version => {
+			function addNewElement(tag, attrs, parent) {
+				const elem = document.createElement(tag);
+				Object.entries(attrs).forEach(([k, v]) => elem[k] = v);
+				parent.appendChild(elem);
+			}
+			addNewElement("link", {rel: "stylesheet", href: `css/style.css?v=${version}`}, document.head);
+			addNewElement("script", {src: `js/polyline_encoding.js?v=${version}`}, document.body);
+			addNewElement("script", {src: `js/with_maplibregl.js?v=${version}`}, document.body);
+		})("0.2.250918");
+	</script>
+
 </body>
 
 </html>

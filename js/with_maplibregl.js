@@ -2,7 +2,7 @@
   "use strict";
 
   const MAX_PITCH = 70;
-  const DEFAULT_PITCH = 60;
+  const DEFAULT_PITCH = 65;
 
   /**
    * 座標列をCSV文字列に変換
@@ -168,7 +168,7 @@
     // 値表示
     document.getElementById("n_traj").textContent = nTraj;
     // ボタン無効化切替
-    document.getElementById("clearTrajBtn").disabled = nTraj === 0;
+    document.getElementById("clearTrajBtn").disabled = nTraj <= 1;
     document.getElementById("addFavBtn").disabled = locked || nTraj === 0;
   }
   /** お気に入り更新イベント対応 */
@@ -203,14 +203,28 @@
     const bearing = map.getBearing() + 5;
     map.easeTo({ bearing, duration: 200 });
   }
+  document.getElementById("rotateN").onclick = () => {
+    map.easeTo({ bearing: 0, duration: 200 });
+  }
+  document.getElementById("rotateS").onclick = () => {
+    map.easeTo({ bearing: 180, duration: 200 });
+  }
+  document.getElementById("rotateE").onclick = () => {
+    map.easeTo({ bearing: 90, duration: 200 });
+  }
+  document.getElementById("rotateW").onclick = () => {
+    map.easeTo({ bearing: -90, duration: 200 });
+  }
   document.getElementById("addPitch").onclick = () => {
     const pitch_old = map.getPitch();
-    const pitch = Math.min(pitch_old + 5 * Math.cos(pitch_old * Math.PI / 180), MAX_PITCH);
+    const d = pitch_old >= 60 ? 1 : 5 * Math.cos(pitch_old * Math.PI / 180);
+    const pitch = Math.min(pitch_old + d, MAX_PITCH);
     map.easeTo({ pitch, duration: 200 });
   };
   document.getElementById("subPitch").onclick = () => {
     const pitch_old = map.getPitch();
-    const pitch = Math.max(pitch_old - 5 * Math.cos(pitch_old * Math.PI / 180), 0);
+    const d = pitch_old >= 60 ? 1 : 5 * Math.cos(pitch_old * Math.PI / 180);
+    const pitch = Math.max(pitch_old - d, 0);
     map.easeTo({ pitch, duration: 200 });
   };
   document.getElementById("zeroPitch").onclick = () => {
@@ -425,6 +439,7 @@
 
 
   document.getElementById("fav_radius").addEventListener("change", e => {
+    updateTrajectory();
     updateFavorites();
   });
 
@@ -472,13 +487,13 @@
 
   // ボタン処理
   document.getElementById("resetView").onclick = () => {
-    map.easeTo({ center: trajectory.at(-1), zoom: 18, bearing: 0, pitch: MAX_PITCH, duration: 500 });
+    map.easeTo({ center: trajectory.at(-1), zoom: 18, bearing: 0, pitch: DEFAULT_PITCH, duration: 500 });
     document.getElementById("fav_radius").value = 40;
   }
   // document.getElementById("clearBtn").onclick = clearAll;
   document.getElementById("clearTrajBtn").onclick = () => {
-    if (trajectory.length > 0) {
-      trajectory.splice(0);
+    if (trajectory.length > 1) {
+      trajectory.splice(0, trajectory.length - 1);  // 現在位置は残す
       updateTrajectory();
       showToast("軌跡をクリア");
     } else {
@@ -527,8 +542,9 @@
    */
   const geolocate = new maplibregl.GeolocateControl({
     positionOptions: { enableHighAccuracy: true },
-    showAccuracyCircle: true,
     trackUserLocation: true,
+    showAccuracyCircle: true,
+    fitBoundsOptions: { maxZoom: 18, offset: [0, 30] },
   });
 
   // Map の コントロールを追加
@@ -559,8 +575,7 @@
   // テスト用ダミーとして軌跡を描画
   if (false) {
     setInterval(() => {
-      if (trajectory.length === 0) return;
-      const [lng, lat] = trajectory.at(-1);
+      const [lng, lat] = trajectory.length === 0 ? [139.72195, 35.62513] : trajectory.at(-1);
       const dLng = (Math.random() - 0.5) / 5000;
       const dLat = (Math.random() - 0.5) / 5000;
       trajectory.push([lng + dLng, lat + dLat]);
