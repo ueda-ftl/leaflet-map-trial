@@ -39,7 +39,18 @@
 	</div>
 	<div class="controls rt">
 		<div>
-			<select id="basemapSelect"></select>
+			<select id="basemapSelect">
+				<option value="osm" title="OpenStreetMap">osm</option>
+				<option value="gsi_std" title="国土地理院 標準地図">gsi</option>
+				<option value="gsi_photo" title="国土地理院 航空写真">gsip</option>
+				<option value="google" title="Google Maps">gmap</option>
+				<option value="osm.3d" title="OpenStreetMap + Plateau" selected>osm+3D</option>
+				<option value="gsi_std.3d" title="国土地理院 標準地図 + Plateau">gsi+3D</option>
+				<option value="gsi_photo.3d" title="国土地理院 航空写真 + Plateau">gsip+3D</option>
+				<option value="google.3d" title="Google Maps + Plateau">gmap+3D</option>
+				<option value="osm.vec" title="OpenStreetMap Vector">osm_vec</option>
+				<option value="gsi.vec" title="国土地理院 Vector">gsi_vec</option>
+			</select>
 		</div>
 		<div>
 			<span id="v_bearing" class="value"></span>
@@ -84,7 +95,7 @@
 		<span class="secondary">
 			<input id="editableFav" type="checkbox" class="toggle-checkbox" />
 			<label for="editableFav" class="toggle-label"></label>
-			<i class="fa-solid fa-lock-open" style="margin: 0 -3px 0 5px;" onclick="document.getElementById('lockFav').click();"></i>
+			<i class="fa-solid fa-lock-open" style="margin: 0 -3px 0 5px;" onclick="document.getElementById('editableFav').click();"></i>
 		</span>
 	</div>
 	<div class="controls rb">

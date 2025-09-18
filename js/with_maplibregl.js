@@ -87,18 +87,6 @@
       },
     };
 
-    document.getElementById("basemapSelect").innerHTML = `
-        <option value="osm.vec" title="OpenStreetMap Vector">osm_vec</option>
-        <option value="gsi.vec" title="国土地理院 Vector">gsi_vec</option>
-        <option value="osm" title="OpenStreetMap">osm</option>
-        <option value="gsi_std" title="国土地理院 標準地図">gsi</option>
-        <option value="gsi_photo" title="国土地理院 航空写真">gsip</option>
-        <option value="google" title="Google Maps">gmap</option>
-        <option value="osm.3d" title="OpenStreetMap + Plateau" selected>osm+3D</option>
-        <option value="gsi_std.3d" title="国土地理院 標準地図 + Plateau">gsi+3D</option>
-        <option value="gsi_photo.3d" title="国土地理院 航空写真 + Plateau">gsip+3D</option>
-        <option value="google.3d" title="Google Maps + Plateau">gmap+3D</option>
-    `;
     function getTileStyle(sourceId, kind) {
       if (kind === "vec") {
         return tileStyles[sourceId];
@@ -201,7 +189,6 @@
     const sourceId = e.target.value;
     const style = getTileStyle(...sourceId.split("."));
     map.setStyle(style);
-    initLayers();
 
     // 初期表示更新
     updateFavorites();
@@ -240,49 +227,46 @@
    * 軌跡表示を更新
    */
   function updateTrajectory() {
-    const trajectorySource = map.getSource("trajectory");
-    if (trajectorySource) {
-      if (trajectory.length === 0) {
-        trajectorySource.setData({ type: "FeatureCollection", features: [] });
-      } else {
-        trajectorySource.setData({
-          type: "FeatureCollection", features: [{
-            type: "Feature",
-            geometry: { type: "LineString", coordinates: trajectory.slice(0) }
-          }]
-        });
-      }
+    const trajectorySource = getTrajectorySource();
+    if (trajectory.length === 0) {
+      trajectorySource.setData({ type: "FeatureCollection", features: [] });
+    } else {
+      trajectorySource.setData({
+        type: "FeatureCollection", features: [{
+          type: "Feature",
+          geometry: { type: "LineString", coordinates: trajectory.slice(0) }
+        }]
+      });
     }
     // 現在地点近傍円
-    const circleSource = map.getSource("now-area");
-    if (circleSource) {
-      if (trajectory.length === 0) {
-        circleSource.setData({ type: "FeatureCollection", features: [] });
-      } else {
-        const radius = parseInt(document.getElementById("fav_radius").value) || 40;
-        const circle = turf.circle(trajectory.at(-1), radius / 1000, { steps: 48 });
-        circleSource.setData(circle);
-      }
+    const circleSource = getNowAreaSource();
+    if (trajectory.length === 0) {
+      circleSource.setData({ type: "FeatureCollection", features: [] });
     } else {
-      alert("not found source: now-area");
+      const radius = parseInt(document.getElementById("fav_radius").value) || 40;
+      const circle = turf.circle(trajectory.at(-1), radius / 1000, { steps: 48 });
+      circleSource.setData(circle);
     }
     onUpdatedTrajectory();
   }
 
-  function initLayers() {
-    // 軌跡レイヤを用意
-    if (!map.getSource("trajectory")) {
-      map.addSource("trajectory", {
+  // 軌跡レイヤを用意
+  function getTrajectorySource() {
+    const sourceId = "trajectory";
+    let source = map.getSource(sourceId);
+    if (!source) {
+      map.addSource(sourceId, {
         type: "geojson",
         lineMetrics: true,
         data: { type: "FeatureCollection", features: [] },
       });
+      source = map.getSource(sourceId);
     }
     if (!map.getLayer("trajectory-line")) {
       map.addLayer({
         id: "trajectory-line",
         type: "line",
-        source: "trajectory",
+        source: sourceId,
         paint: {
           "line-color": "green",
           "line-width": 3,
@@ -300,18 +284,24 @@
         },
       });
     }
-    // お気に入り近傍円レイヤを用意
-    if (!map.getSource("favorite-area")) {
-      map.addSource("favorite-area", {
+    return source;
+  }
+  // お気に入り近傍円レイヤを用意
+  function getFavoriteAreaSource() {
+    const sourceId = "favorite-area";
+    let source = map.getSource(sourceId);
+    if (!source) {
+      map.addSource(sourceId, {
         type: "geojson",
         data: { type: "FeatureCollection", features: [] },
       });
+      source = map.getSource(sourceId);
     }
     if (!map.getLayer("favorite-area-fill")) {
       map.addLayer({
         id: "favorite-area-fill",
         type: "fill",
-        source: "favorite-area",
+        source: sourceId,
         paint: {
           // "fill-color": "#58BE89",
           // "fill-color": "#FF7F005F",
@@ -323,10 +313,12 @@
           "fill-opacity": 0.3,
         },
       });
+    }
+    if (!map.getLayer("favorite-area-line")) {
       map.addLayer({
         id: "favorite-area-line",
         type: "line",
-        source: "favorite-area",
+        source: sourceId,
         paint: {
           "line-color": "#FF00007F",
           "line-opacity": 0.7,
@@ -334,18 +326,24 @@
         },
       });
     }
-    // 現在地点近傍円レイヤを用意
-    if (!map.getSource("now-area")) {
-      map.addSource("now-area", {
+    return source;
+  }
+  // 現在地点近傍円レイヤを用意
+  function getNowAreaSource() {
+    const sourceId = "now-area";
+    let source = map.getSource(sourceId);
+    if (!source) {
+      map.addSource(sourceId, {
         type: "geojson",
         data: { type: "FeatureCollection", features: [] },
       });
+      source = map.getSource(sourceId);
     }
     if (!map.getLayer("now-area-line")) {
       map.addLayer({
         id: "now-area-line",
         type: "line",
-        source: "now-area",
+        source: sourceId,
         paint: {
           "line-color": "blue",
           "line-opacity": 0.6,
@@ -353,11 +351,11 @@
         },
       });
     }
+    return source;
   }
 
   map.on("load", () => {
     console.log("load");
-    initLayers();
     // 現在位置トラッキング開始
     geolocate.trigger();
 
@@ -407,25 +405,21 @@
       favorites.push(markerFocused);
     }
     const radius = parseInt(document.getElementById("fav_radius").value) || 40;
-    const circleSource = map.getSource("favorite-area");
-    if (circleSource) {
-      const features = [];
-      const locked = !isEditableFav();
-      favorites.toReversed().forEach((marker, index) => {
-        marker.setOpacity(locked ? 0.2 : 0.3);
-        const { lat, lng } = marker.getLngLat();
-        const circle = turf.circle([lng, lat], radius / 1000, { steps: 24, properties: { index } });
-        features.push(circle);
-      });
-      const empty = favorites.length === 0;
-      if (!empty && !locked) {
-        // 最後のマーカーを強調
-        favorites.at(-1).setOpacity(1);
-      }
-      circleSource.setData({ type: "FeatureCollection", features });
-    } else {
-      alert("not found source: favorite-area");
+    const circleSource = getFavoriteAreaSource();
+    const features = [];
+    const locked = !isEditableFav();
+    favorites.toReversed().forEach((marker, index) => {
+      marker.setOpacity(locked ? 0.2 : 0.3);
+      const { lat, lng } = marker.getLngLat();
+      const circle = turf.circle([lng, lat], radius / 1000, { steps: 24, properties: { index } });
+      features.push(circle);
+    });
+    const empty = favorites.length === 0;
+    if (!empty && !locked) {
+      // 最後のマーカーを強調
+      favorites.at(-1).setOpacity(1);
     }
+    circleSource.setData({ type: "FeatureCollection", features });
     onUpdatedFavorite();
   }
 
