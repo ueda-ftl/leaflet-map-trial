@@ -38,30 +38,27 @@
 		<button id="clearTrajBtn" class="secondary" title="軌跡削除"><i class="fa-solid fa-eraser"></i></button>
 	</div>
 	<div class="controls rt">
-		<div id="basemap-control">
-			<select id="basemap_select"></select>
+		<div>
+			<select id="basemapSelect"></select>
 		</div>
 		<div>
-			<button id="addPitch" class="tertiary" title="傾斜+"><i class="fa-solid fa-slash"></i></button>
-			<button id="subPitch" class="tertiary" title="傾斜-"><i class="fa-solid fa-minus"></i></button>
-		</div>
-		<div>
+			<span id="v_bearing" class="value"></span>
 			<button id="rotateRight" class="tertiary" title="時計回り"><i class="fa-solid fa-rotate-right"></i></button>
 			<button id="rotateLeft" class="tertiary" title="反時計回り"><i class="fa-solid fa-rotate-left"></i></button>
+			<i class="fa-solid fa-rotate"></i>
 		</div>
-		<table>
+		<div>
+			<span id="v_pitch" class="value"></span>
+			<button id="addPitch" class="tertiary" title="傾斜+"><i class="fa-solid fa-plus"></i></button>
+			<button id="subPitch" class="tertiary" title="傾斜-"><i class="fa-solid fa-minus"></i></button>
+			<button id="zeroPitch" class="tertiary" title="フラット"><i class="fa-solid fa-0"></i></button>
+			<i class="fa-solid fa-slash"></i>
+		</div>
+		<table class="value">
 			<tbody>
 				<tr>
 					<td>zoom</td>
 					<td id="v_zoom"></td>
-				</tr>
-				<tr>
-					<td>bear</td>
-					<td id="v_bearing"></td>
-				</tr>
-				<tr>
-					<td>pitch</td>
-					<td id="v_pitch"></td>
 				</tr>
 				<tr>
 					<td>N traj.</td>
@@ -85,9 +82,9 @@
 		<button id="delFavBtn" class="secondary" title="お気に入り削除"><i class="fa-solid fa-delete-left"></i></button>
 		<button id="addFavBtn" class="primary" title="お気に入り追加"><i class="fa-solid fa-thumbtack"></i></button>
 		<span class="secondary">
-			<i class="fa-solid fa-lock-open" style="margin: 0 -3px 0 5px;"></i>
-			<input id="lockFav" type="checkbox" class="toggle-checkbox" checked />
-			<label for="lockFav" class="toggle-label"></label>
+			<input id="editableFav" type="checkbox" class="toggle-checkbox" />
+			<label for="editableFav" class="toggle-label"></label>
+			<i class="fa-solid fa-lock-open" style="margin: 0 -3px 0 5px;" onclick="document.getElementById('lockFav').click();"></i>
 		</span>
 	</div>
 	<div class="controls rb">
@@ -97,7 +94,7 @@
 	<!-- トースト表示エリア -->
 	<div id="toast" class="hide"></div>
 
-	<script src="js/with_maplibregl.js?v=0.1.0"></script>
+	<script src="js/with_maplibregl.js?v=0.1.1"></script>
 </body>
 
 </html>

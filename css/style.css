@@ -56,11 +56,13 @@ body {
 		font-size: 12px;
 	}
 
-	>table {
+	.value {
 		background-color: rgba(255, 255, 255, 0.2);
 		font-size: 12px;
 		color: magenta;
+	}
 
+	>table {
 		td:last-child {
 			text-align: right;
 		}
@@ -92,6 +94,10 @@ body {
 	box-shadow: none;
 	top: 10px;
 	right: 48px;
+
+	> div > button{
+		margin: -2px;
+	}
 }
 
 .controls.rb {

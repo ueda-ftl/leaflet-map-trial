@@ -47,8 +47,8 @@
 
   const getTileStyle = (() => {
     const tileStyles = {
-      osm_vec: "https://tile.openstreetmap.jp/styles/osm-bright-ja/style.json",
-      gsi_vec: "https://gsi-cyberjapan.github.io/gsivectortile-mapbox-gl-js/pale.json",
+      osm: "https://tile.openstreetmap.jp/styles/osm-bright-ja/style.json",
+      gsi: "https://gsi-cyberjapan.github.io/gsivectortile-mapbox-gl-js/pale.json",
     };
 
     const tileSources = {
@@ -76,29 +76,62 @@
         tileSize: 256,
         attribution: "© Google"
       },
+      // 3D都市モデル（Project PLATEAU）東京都23区（2020年度）建物データ
+      "plateau-bldg": {
+        type: "vector",
+        tiles: ["https://indigo-lab.github.io/plateau-lod2-mvt/{z}/{x}/{y}.pbf"],
+        minzoom: 10,
+        maxzoom: 16,
+        attribution: "<a href='https://github.com/indigo-lab/plateau-lod2-mvt'>plateau-lod2-mvt by indigo-lab</a>"
+          + "(<a href='https://www.mlit.go.jp/plateau/'>国土交通省 Project PLATEAU</a> のデータを加工して作成)",
+      },
     };
 
-    document.getElementById("basemap_select").innerHTML = `
-        <option value="osm_vec" title="OpenStreetMap Vector">osm_vec</option>
-        <option value="gsi_vec" title="国土地理院 Vector">gsi_vec</option>
+    document.getElementById("basemapSelect").innerHTML = `
+        <option value="osm.vec" title="OpenStreetMap Vector">osm_vec</option>
+        <option value="gsi.vec" title="国土地理院 Vector">gsi_vec</option>
         <option value="osm" title="OpenStreetMap">osm</option>
         <option value="gsi_std" title="国土地理院 標準地図">gsi</option>
         <option value="gsi_photo" title="国土地理院 航空写真">gsip</option>
         <option value="google" title="Google Maps">gmap</option>
+        <option value="osm.3d" title="OpenStreetMap + Plateau" selected>osm+3D</option>
+        <option value="gsi_std.3d" title="国土地理院 標準地図 + Plateau">gsi+3D</option>
+        <option value="gsi_photo.3d" title="国土地理院 航空写真 + Plateau">gsip+3D</option>
+        <option value="google.3d" title="Google Maps + Plateau">gmap+3D</option>
     `;
-    function getTileStyle(sourceId) {
-      const style = tileStyles[sourceId];
-      if (style) {
-        return style;
+    function getTileStyle(sourceId, kind) {
+      if (kind === "vec") {
+        return tileStyles[sourceId];
+      }
+      const layers = [
+        { id: "basemap", type: "raster", source: sourceId },
+      ]
+      if (kind === "3d") {
+        layers.push({
+          id: "bldg",
+          type: "fill-extrusion",
+          source: "plateau-bldg",
+          // ベクタタイルソースから使用するレイヤ
+          "source-layer": "bldg",
+          paint: {
+            // 高さ
+            "fill-extrusion-height": ["*", ["get", "z"], 0.2],
+            // 塗りつぶしの色
+            "fill-extrusion-color": "#797979",
+            // 透明度
+            "fill-extrusion-opacity": 0.4,
+          },
+        });
       }
       return {
         version: 8,
         sources: tileSources,
-        layers: [{ id: "basemap", type: "raster", source: sourceId }]
+        layers,
       };
     }
     return getTileStyle;
   })();
+  const defaultStyle = getTileStyle(...document.getElementById("basemapSelect").value.split("."));
 
   /**
    * Map オブジェクト
@@ -106,7 +139,7 @@
    */
   const map = new maplibregl.Map({
     container: "map",
-    style: getTileStyle("osm_vec"),
+    style: defaultStyle,
     center: [139.72195, 35.62513],
     zoom: 14,
     attributionControl: false,  // 既存Attributionを非表示
@@ -115,8 +148,8 @@
     pitch: DEFAULT_PITCH,
   });
 
-  function isLockedFav() {
-    return document.getElementById("lockFav").checked;
+  function isEditableFav() {
+    return document.getElementById("editableFav").checked;
   }
 
   /** ズーム更新イベント対応 */
@@ -128,32 +161,33 @@
   /** 方位変更イベント対応 */
   function onUpdatedBearing() {
     const bearing = map.getBearing();
-    document.getElementById("v_bearing").textContent = bearing.toFixed(0);
+    document.getElementById("v_bearing").textContent = bearing.toFixed(1);
   }
   /** 傾斜更新イベント対応 */
   function onUpdatedPitch() {
     const pitch = map.getPitch();
     // 値表示
-    document.getElementById("v_pitch").textContent = pitch.toFixed(0);
+    document.getElementById("v_pitch").textContent = pitch.toFixed(1);
     // ボタン無効化切替
     document.getElementById("addPitch").disabled = pitch >= MAX_PITCH;
     document.getElementById("subPitch").disabled = pitch <= 0;
+    document.getElementById("zeroPitch").disabled = pitch == 0;
   }
   /** 軌跡更新イベント対応 */
   function onUpdatedTrajectory() {
     const nTraj = trajectory.length;
-    const locked = isLockedFav();
+    const locked = !isEditableFav();
     // 値表示
     document.getElementById("n_traj").textContent = nTraj;
     // ボタン無効化切替
-    document.getElementById("clearTraj").disabled = nTraj === 0;
+    document.getElementById("clearTrajBtn").disabled = nTraj === 0;
     document.getElementById("addFavBtn").disabled = locked || nTraj === 0;
   }
   /** お気に入り更新イベント対応 */
   function onUpdatedFavorite() {
     const nFav = favorites.length;
     const nTraj = trajectory.length;
-    const locked = isLockedFav();
+    const locked = !isEditableFav();
     // 値表示
     document.getElementById("n_fav").textContent = nFav;
     // ボタン無効化切替
@@ -163,10 +197,15 @@
   }
 
   // タイル切り替え
-  document.getElementById("basemap_select").addEventListener("change", e => {
+  document.getElementById("basemapSelect").addEventListener("change", e => {
     const sourceId = e.target.value;
-    const style = getTileStyle(sourceId);
+    const style = getTileStyle(...sourceId.split("."));
     map.setStyle(style);
+    initLayers();
+
+    // 初期表示更新
+    updateFavorites();
+    updateTrajectory();
   });
 
   document.getElementById("rotateRight").onclick = () => {
@@ -187,6 +226,9 @@
     const pitch = Math.max(pitch_old - 5 * Math.cos(pitch_old * Math.PI / 180), 0);
     map.easeTo({ pitch, duration: 200 });
   };
+  document.getElementById("zeroPitch").onclick = () => {
+    map.easeTo({ pitch: 0, duration: 200 });
+  };
 
   /**
    * 軌跡
@@ -199,72 +241,128 @@
    */
   function updateTrajectory() {
     const trajectorySource = map.getSource("trajectory");
-    if (!trajectorySource) return;
-    if (trajectory.length === 0) {
-      trajectorySource.setData({ type: "FeatureCollection", features: [] });
+    if (trajectorySource) {
+      if (trajectory.length === 0) {
+        trajectorySource.setData({ type: "FeatureCollection", features: [] });
+      } else {
+        trajectorySource.setData({
+          type: "FeatureCollection", features: [{
+            type: "Feature",
+            geometry: { type: "LineString", coordinates: trajectory.slice(0) }
+          }]
+        });
+      }
+    }
+    // 現在地点近傍円
+    const circleSource = map.getSource("now-area");
+    if (circleSource) {
+      if (trajectory.length === 0) {
+        circleSource.setData({ type: "FeatureCollection", features: [] });
+      } else {
+        const radius = parseInt(document.getElementById("fav_radius").value) || 40;
+        const circle = turf.circle(trajectory.at(-1), radius / 1000, { steps: 48 });
+        circleSource.setData(circle);
+      }
     } else {
-      trajectorySource.setData({
-        type: "FeatureCollection", features: [{
-          type: "Feature",
-          geometry: { type: "LineString", coordinates: trajectory.slice(0) }
-        }]
-      });
+      alert("not found source: now-area");
     }
     onUpdatedTrajectory();
   }
 
-  // GeoJSON ソース追加
-  map.on("load", () => {
+  function initLayers() {
     // 軌跡レイヤを用意
-    map.addSource("trajectory", {
-      type: "geojson",
-      lineMetrics: true,
-      data: { type: "FeatureCollection", features: [] },
-    });
-    map.addLayer({
-      id: "trajectory-line",
-      type: "line",
-      source: "trajectory",
-      paint: {
-        "line-color": "green",
-        "line-width": 3,
-        "line-gradient": [
-          "interpolate",
-          ["linear"],
-          ["line-progress"],
-          0, "cyan",
-          1, "green"
-        ],
-      },
-      layout: {
-        "line-cap": "round",
-        "line-join": "round",
-      },
-    });
+    if (!map.getSource("trajectory")) {
+      map.addSource("trajectory", {
+        type: "geojson",
+        lineMetrics: true,
+        data: { type: "FeatureCollection", features: [] },
+      });
+    }
+    if (!map.getLayer("trajectory-line")) {
+      map.addLayer({
+        id: "trajectory-line",
+        type: "line",
+        source: "trajectory",
+        paint: {
+          "line-color": "green",
+          "line-width": 3,
+          "line-gradient": [
+            "interpolate",
+            ["linear"],
+            ["line-progress"],
+            0, "cyan",
+            1, "green"
+          ],
+        },
+        layout: {
+          "line-cap": "round",
+          "line-join": "round",
+        },
+      });
+    }
     // お気に入り近傍円レイヤを用意
-    map.addSource("favorite-area", {
-      type: "geojson",
-      data: { type: "FeatureCollection", features: [] },
-    });
-    map.addLayer({
-      id: "favorite-area-fill",
-      type: "fill",
-      source: "favorite-area",
-      paint: {
-        // "fill-color": "#58BE89",
-        "fill-color": [
-          "match", ["get", "index"],
-          0, "#FF00007F",  // 最後の円を赤で強調
-          "#FF7F005F"
-        ],
-        "fill-opacity": 0.5
-      },
-    });
+    if (!map.getSource("favorite-area")) {
+      map.addSource("favorite-area", {
+        type: "geojson",
+        data: { type: "FeatureCollection", features: [] },
+      });
+    }
+    if (!map.getLayer("favorite-area-fill")) {
+      map.addLayer({
+        id: "favorite-area-fill",
+        type: "fill",
+        source: "favorite-area",
+        paint: {
+          // "fill-color": "#58BE89",
+          // "fill-color": "#FF7F005F",
+          "fill-color": [
+            "match", ["get", "index"],
+            0, "#FF00007F",  // 最後の円を赤で強調
+            "#FF7F005F"
+          ],
+          "fill-opacity": 0.3,
+        },
+      });
+      map.addLayer({
+        id: "favorite-area-line",
+        type: "line",
+        source: "favorite-area",
+        paint: {
+          "line-color": "#FF00007F",
+          "line-opacity": 0.7,
+          "line-width": 2,
+        },
+      });
+    }
+    // 現在地点近傍円レイヤを用意
+    if (!map.getSource("now-area")) {
+      map.addSource("now-area", {
+        type: "geojson",
+        data: { type: "FeatureCollection", features: [] },
+      });
+    }
+    if (!map.getLayer("now-area-line")) {
+      map.addLayer({
+        id: "now-area-line",
+        type: "line",
+        source: "now-area",
+        paint: {
+          "line-color": "blue",
+          "line-opacity": 0.6,
+          "line-width": 2,
+        },
+      });
+    }
+  }
+
+  map.on("load", () => {
+    console.log("load");
+    initLayers();
+    // 現在位置トラッキング開始
+    geolocate.trigger();
 
     // URLから復元
     restoreFromUrl();
-    // 現在位置トラッキング開始
-    geolocate.trigger();
 
     // 初期表示更新
     onUpdatedZoom();
@@ -290,7 +388,7 @@
   function addFavorite(lngLat) {
     const marker = new maplibregl.Marker({
       color: "red",
-      draggable: !isLockedFav(),
+      draggable: isEditableFav(),
       className: "favorite-marker",
     }).setLngLat(lngLat).addTo(map);
     // クリックした or ドラッグしているマーカーをお気に入りリストの最後に移動
@@ -310,21 +408,24 @@
     }
     const radius = parseInt(document.getElementById("fav_radius").value) || 40;
     const circleSource = map.getSource("favorite-area");
-    if (!circleSource) return;
-    const features = [];
-    const locked = isLockedFav();
-    favorites.toReversed().forEach((marker, index) => {
-      marker.setOpacity(locked ? 0.4 : 0.6);
-      const { lat, lng } = marker.getLngLat();
-      const circle = turf.circle([lng, lat], radius / 1000, { steps: 24, properties: { index } });
-      features.push(circle);
-    });
-    const empty = favorites.length === 0;
-    if (!empty && !locked) {
-      // 最後のマーカーを強調
-      favorites.at(-1).setOpacity(0.8);
+    if (circleSource) {
+      const features = [];
+      const locked = !isEditableFav();
+      favorites.toReversed().forEach((marker, index) => {
+        marker.setOpacity(locked ? 0.2 : 0.3);
+        const { lat, lng } = marker.getLngLat();
+        const circle = turf.circle([lng, lat], radius / 1000, { steps: 24, properties: { index } });
+        features.push(circle);
+      });
+      const empty = favorites.length === 0;
+      if (!empty && !locked) {
+        // 最後のマーカーを強調
+        favorites.at(-1).setOpacity(1);
+      }
+      circleSource.setData({ type: "FeatureCollection", features });
+    } else {
+      alert("not found source: favorite-area");
     }
-    circleSource.setData({ type: "FeatureCollection", features });
     onUpdatedFavorite();
   }
 
@@ -339,7 +440,7 @@
    */
   function clearAll() {
     favorites.forEach(m => m.remove());
-    if (!isLockedFav()) {
+    if (isEditableFav()) {
       favorites.splice(0);
       updateFavorites();
     }
@@ -377,7 +478,7 @@
 
   // ボタン処理
   document.getElementById("resetView").onclick = () => {
-    map.easeTo({ center: trajectory.at(-1), zoom: 18, bearing: 0, pitch : MAX_PITCH, duration: 500 });
+    map.easeTo({ center: trajectory.at(-1), zoom: 18, bearing: 0, pitch: MAX_PITCH, duration: 500 });
     document.getElementById("fav_radius").value = 40;
   }
   // document.getElementById("clearBtn").onclick = clearAll;
@@ -391,7 +492,7 @@
     }
   };
   document.getElementById("addFavBtn").onclick = () => {
-    if (isLockedFav()) return;
+    if (!isEditableFav()) return;
     if (trajectory.length > 0) {
       // 現在位置（軌跡の最後の座標）をお気に入りに追加
       addFavorite(trajectory.at(-1));
@@ -401,7 +502,7 @@
     }
   };
   document.getElementById("delFavBtn").onclick = () => {
-    if (isLockedFav()) return;
+    if (!isEditableFav()) return;
     // お気に入りの最後のマーカーを削除
     const m = favorites.pop();
     if (m) {
@@ -420,8 +521,8 @@
       showToast("お気に入りが空");
     }
   };
-  document.getElementById("lockFav").addEventListener("change", () => {
-    const draggable = !isLockedFav();
+  document.getElementById("editableFav").addEventListener("change", () => {
+    const draggable = isEditableFav();
     favorites.forEach(e => e.setDraggable(draggable));
     updateFavorites();
   });
