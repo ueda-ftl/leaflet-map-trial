@@ -18,6 +18,16 @@ body {
 	/* box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2); */
 	z-index: 10;
 
+	pointer-events: none;
+
+	button,
+	input,
+	select,
+	label,
+	i {
+		pointer-events: auto;
+	}
+
 	button {
 		width: fit-content;
 		height: fit-content;
@@ -222,4 +232,8 @@ body {
 
 .toggle-checkbox:checked+.toggle-label::after {
 	transform: translateX(25px);
+}
+
+.maplibregl-ctrl-bottom-left > .maplibregl-ctrl {
+	pointer-events: none;
 }

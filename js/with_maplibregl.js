@@ -194,18 +194,24 @@
   function changeTile() {
     const sourceId = document.getElementById("basemapSelect").value;
     const with3d = document.getElementById("with3D").checked;
+    document.getElementById("ratioHeight").disabled = !with3d;
     const style = getTileStyle(sourceId, with3d);
     map.setStyle(style);
-    // 初期表示更新
+    // オーバレイ表示更新
     updateFavorites();
     updateTrajectory();
   }
   document.getElementById("basemapSelect").addEventListener("change", changeTile);
-  document.getElementById("with3D").addEventListener("change", changeTile);
+  document.getElementById("with3D").addEventListener("change", () => {
+     changeTile();
+  });
   document.getElementById("ratioHeight").addEventListener("change", changeTile);
 
   document.getElementById("redraw").addEventListener("click", () => {
     map.redraw();
+    // オーバレイ表示更新
+    updateFavorites();
+    updateTrajectory();
   });
   document.getElementById("rotateRight").addEventListener("click", () => {
     if (isLockMap()) return;

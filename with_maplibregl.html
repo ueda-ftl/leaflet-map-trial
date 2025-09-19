@@ -33,7 +33,6 @@
 	<!-- 各種操作ボタン -->
 	<div class="controls lt">
 		<div class="secondary-group">
-			<button id="redraw"><i class="fa-solid fa-rotate-right"></i></button>
 			<select id="basemapSelect">
 				<option value="osm" title="OpenStreetMap">osm</option>
 				<option value="gsi_std" title="国土地理院 標準地図">gsi</option>
@@ -43,13 +42,16 @@
 				<option value="gsi_vec" title="国土地理院 Vector">gsi_vec</option>
 			</select>
 		</div>
-		<div class="secondary-group">
-			<span>
+		<div>
+			<span class="secondary">
 				<input id="with3D" type="checkbox" class="toggle-checkbox" checked />
 				<label for="with3D" class="toggle-label"></label>
 				<i class="fa-solid fa-cubes" style="margin: 0 5px 0 -3px;"
 					onclick="document.getElementById('with3D').click();"></i>
 			</span>
+		</div>
+		<button id="redraw" class="secondary"><i class="fa-solid fa-rotate-right"></i></button>
+		<div class="secondary-group">
 			<input type="number" id="ratioHeight" min="0" max="1" step="0.1" value="0.2">
 		</div>
 		<button id="clearTrajBtn" class="secondary" title="軌跡削除"><i class="fa-solid fa-eraser"></i></button>
@@ -59,11 +61,12 @@
 			<span id="v_bearing" class="value"></span>
 			<button id="rotateRight" title="時計回り"><i class="fa-solid fa-rotate-right"></i></button>
 			<button id="rotateLeft" title="反時計回り"><i class="fa-solid fa-rotate-left"></i></button>
+		</div>
+		<div class="tertiary-group">
 			<button id="rotateN" title="北"><i class="fa-solid fa-n"></i></button>
 			<button id="rotateS" title="南"><i class="fa-solid fa-s"></i></button>
 			<button id="rotateW" title="西"><i class="fa-solid fa-w"></i></button>
 			<button id="rotateE" title="東"><i class="fa-solid fa-e"></i></button>
-			<i class="fa-solid fa-rotate"></i>
 		</div>
 		<div class="tertiary-group">
 			<span id="v_pitch" class="value"></span>
@@ -123,14 +126,14 @@
 			<input type="number" id="fav_radius" min="5" max="300" step="1" value="40" class="secondary">
 			<span>m</span>
 		</div>
-		<span class="secondary">
-			<button id="delFavBtn" class="secondary" title="お気に入り削除"><i class="fa-solid fa-delete-left"></i></button>
+		<button id="delFavBtn" class="secondary" title="お気に入り削除"><i class="fa-solid fa-delete-left"></i></button>
+		<div class="secondary">
 			<input id="editableFav" type="checkbox" class="toggle-checkbox" />
 			<label for="editableFav" class="toggle-label"></label>
 			<i class="fa-solid fa-lock-open" style="margin: 0 5px 0 -3px;"
 				onclick="document.getElementById('editableFav').click();"></i>
-			<button id="addFavBtn" class="primary" title="お気に入り追加"><i class="fa-solid fa-thumbtack"></i></button>
-		</span>
+		</div>
+		<button id="addFavBtn" class="primary" title="お気に入り追加"><i class="fa-solid fa-thumbtack"></i></button>
 	</div>
 
 	<!-- トースト表示エリア -->
@@ -146,7 +149,7 @@
 			addNewElement("link", { rel: "stylesheet", href: `css/style.css?v=${version}` }, document.head);
 			addNewElement("script", { src: `js/polyline_encoding.js?v=${version}` }, document.body);
 			addNewElement("script", { src: `js/with_maplibregl.js?v=${version}` }, document.body);
-		})("0.2.250919d");
+		})("0.2.250919e");
 	</script>
 
 </body>
