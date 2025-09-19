@@ -542,7 +542,13 @@
   // ボタン処理
   document.getElementById("resetView").addEventListener("click", () => {
     if (isLockMap()) return;
-    map.easeTo({ center: trajectory.at(-1), zoom: 18, bearing: 0, pitch: DEFAULT_PITCH, duration: 500 });
+    map.easeTo({
+      center: trajectory.at(-1),
+      bearing: orientation,
+      zoom: 18,
+      pitch: DEFAULT_PITCH,
+      duration: 500,
+    });
     document.getElementById("fav_radius").value = 40;
   });
   // document.getElementById("clearBtn").addEventListener("click", clearAll;
@@ -649,18 +655,14 @@
   geolocate.on("error", err => {
     console.warn("位置情報取得エラー", err);
   });
+  let orientation = 0.0;
   window.addEventListener("deviceorientation", (e) => {
-    const a = e.absolute;  //方位が地球座標フレームかデバイス任意フレームか
+    // const a = e.absolute;  //方位が地球座標フレームかデバイス任意フレームか
     const z = e.alpha;  //z軸 0～360
-    const x = e.beta;  //x軸 -180～180
-    const y = e.gamma;  //y軸 -90～90
-    // document.getElementById("orientation").innerHTML=
-    //   " alpha(z軸):"+z.toFixed(3)+"<br>"+
-    //   "  beta(x軸):"+x.toFixed(3)+"<br>"+
-    //   " gamma(y軸):"+y.toFixed(3);
+    // const x = e.beta;  //x軸 -180～180
+    // const y = e.gamma;  //y軸 -90～90
     if (z != null) {
-      map.setBearing(z);
-      onUpdatedBearing();
+      orientation = z;
     }
   });
 
