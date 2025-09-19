@@ -459,6 +459,7 @@
   }
   ["N", "NE", "E", "SE", "S", "SW", "W", "NW"].forEach((e, i) => {
     document.getElementById("moveFav" + e).addEventListener("click", () => {
+      if (!isEditableFav()) return;
       moveFav(1, i * 45);
       updateFavorites();
     });
