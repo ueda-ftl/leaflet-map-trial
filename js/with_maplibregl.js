@@ -635,12 +635,12 @@
 
   // 現在位置取得イベント
   geolocate.on("geolocate", (pos) => {
-    const { latitude, longitude, heading } = pos.coords;
-    if (heading != null) {
-      showToast(heading);
-      map.setBearing(heading);
-      onUpdatedBearing();
-    }
+    const { latitude, longitude } = pos.coords;
+    // if (heading != null) {
+    //   showToast(heading);
+    //   map.setBearing(heading);
+    //   onUpdatedBearing();
+    // }
     const coord = [longitude, latitude];
     trajectory.push(coord);
     // 軌跡更新
@@ -648,6 +648,20 @@
   });
   geolocate.on("error", err => {
     console.warn("位置情報取得エラー", err);
+  });
+  window.addEventListener("deviceorientation", (e) => {
+    const a = e.absolute;  //方位が地球座標フレームかデバイス任意フレームか
+    const z = e.alpha;  //z軸 0～360
+    const x = e.beta;  //x軸 -180～180
+    const y = e.gamma;  //y軸 -90～90
+    // document.getElementById("orientation").innerHTML=
+    //   " alpha(z軸):"+z.toFixed(3)+"<br>"+
+    //   "  beta(x軸):"+x.toFixed(3)+"<br>"+
+    //   " gamma(y軸):"+y.toFixed(3);
+    if (z != null) {
+      map.setBearing(z);
+      onUpdatedBearing();
+    }
   });
 
   // テスト用ダミーとして軌跡を描画
