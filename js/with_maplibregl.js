@@ -47,8 +47,8 @@
 
   const getTileStyle = (() => {
     const tileStyles = {
-      osm: "https://tile.openstreetmap.jp/styles/osm-bright-ja/style.json",
-      gsi: "https://gsi-cyberjapan.github.io/gsivectortile-mapbox-gl-js/pale.json",
+      osm_vec: "https://tile.openstreetmap.jp/styles/osm-bright-ja/style.json",
+      gsi_vec: "https://gsi-cyberjapan.github.io/gsivectortile-mapbox-gl-js/pale.json",
     };
 
     const tileSources = {
@@ -87,14 +87,17 @@
       },
     };
 
-    function getTileStyle(sourceId, kind) {
-      if (kind === "vec") {
-        return tileStyles[sourceId];
+    function getTileStyle(sourceId, with3d) {
+      const style = tileStyles[sourceId];
+      document.getElementById("with3D").disabled = !!style;
+      if (style) {
+        return style;
       }
       const layers = [
         { id: "basemap", type: "raster", source: sourceId },
       ]
-      if (kind === "3d") {
+      if (with3d) {
+        const ratio = parseFloat(document.getElementById("ratioHeight").value) || 0;
         layers.push({
           id: "bldg",
           type: "fill-extrusion",
@@ -103,7 +106,7 @@
           "source-layer": "bldg",
           paint: {
             // 高さ
-            "fill-extrusion-height": ["*", ["get", "z"], 0.2],
+            "fill-extrusion-height": ["*", ["get", "z"], ratio],
             // 塗りつぶしの色
             "fill-extrusion-color": "#797979",
             // 透明度
@@ -119,7 +122,7 @@
     }
     return getTileStyle;
   })();
-  const defaultStyle = getTileStyle(...document.getElementById("basemapSelect").value.split("."));
+  const defaultStyle = getTileStyle(document.getElementById("basemapSelect").value, document.getElementById("with3D"));
 
   /**
    * Map オブジェクト
@@ -188,60 +191,66 @@
   }
 
   // タイル切り替え
-  document.getElementById("basemapSelect").addEventListener("change", e => {
-    const sourceId = e.target.value;
-    const style = getTileStyle(...sourceId.split("."));
+  function changeTile() {
+    const sourceId = document.getElementById("basemapSelect").value;
+    const with3d = document.getElementById("with3D").checked;
+    const style = getTileStyle(sourceId, with3d);
     map.setStyle(style);
-
     // 初期表示更新
     updateFavorites();
     updateTrajectory();
-  });
+  }
+  document.getElementById("basemapSelect").addEventListener("change", changeTile);
+  document.getElementById("with3D").addEventListener("change", changeTile);
+  document.getElementById("ratioHeight").addEventListener("change", changeTile);
 
-  document.getElementById("rotateRight").onclick = () => {
+  document.getElementById("redraw").addEventListener("click", () => {
+    map.redraw();
+  });
+  document.getElementById("rotateRight").addEventListener("click", () => {
     if (isLockMap()) return;
     const bearing = map.getBearing() - 5;
     map.easeTo({ bearing, duration: 200 });
-  }
-  document.getElementById("rotateLeft").onclick = () => {
+  });
+  document.getElementById("rotateLeft").addEventListener("click", () => {
     if (isLockMap()) return;
     const bearing = map.getBearing() + 5;
     map.easeTo({ bearing, duration: 200 });
-  }
-  document.getElementById("rotateN").onclick = () => {
+  });
+  document.getElementById("rotateN").addEventListener("click", () => {
     if (isLockMap()) return;
     map.easeTo({ bearing: 0, duration: 200 });
-  }
-  document.getElementById("rotateS").onclick = () => {
+  });
+  document.getElementById("rotateS").addEventListener("click", () => {
     if (isLockMap()) return;
     map.easeTo({ bearing: 180, duration: 200 });
-  }
-  document.getElementById("rotateE").onclick = () => {
+  });
+  document.getElementById("rotateE").addEventListener("click", () => {
     if (isLockMap()) return;
     map.easeTo({ bearing: 90, duration: 200 });
-  }
-  document.getElementById("rotateW").onclick = () => {
+  });
+  document.getElementById("rotateW").addEventListener("click", () => {
     if (isLockMap()) return;
     map.easeTo({ bearing: -90, duration: 200 });
-  }
-  document.getElementById("addPitch").onclick = () => {
+  });
+  document.getElementById("addPitch").addEventListener("click", () => {
     if (isLockMap()) return;
     const pitch_old = map.getPitch();
     const d = pitch_old >= 60 ? 1 : 5 * Math.cos(pitch_old * Math.PI / 180);
     const pitch = Math.min(pitch_old + d, MAX_PITCH);
     map.easeTo({ pitch, duration: 200 });
-  };
-  document.getElementById("subPitch").onclick = () => {
+  });
+  document.getElementById("subPitch").addEventListener("click", () => {
     if (isLockMap()) return;
     const pitch_old = map.getPitch();
     const d = pitch_old >= 60 ? 1 : 5 * Math.cos(pitch_old * Math.PI / 180);
     const pitch = Math.max(pitch_old - d, 0);
     map.easeTo({ pitch, duration: 200 });
-  };
-  document.getElementById("zeroPitch").onclick = () => {
+  });
+  document.getElementById("zeroPitch").addEventListener("click", () => {
     if (isLockMap()) return;
     map.easeTo({ pitch: 0, duration: 200 });
-  };
+  });
 
   /**
    * 軌跡
@@ -410,15 +419,50 @@
    */
   function addFavorite(lngLat) {
     const marker = new maplibregl.Marker({
-      color: "red",
+      color: "#ADFF2F",
       draggable: isEditableFav(),
       className: "favorite-marker",
     }).setLngLat(lngLat).addTo(map);
     // クリックした or ドラッグしているマーカーをお気に入りリストの最後に移動
-    marker.getElement().onclick = () => updateFavorites(marker);
+    marker.getElement().addEventListener("click", () => updateFavorites(marker));
     marker.on("drag", () => updateFavorites(marker));
     favorites.push(marker);
   }
+
+  function destination(lon1, lat1, distance, bearing) {
+    const R = 6371000;  // 地球の半径（メートル）
+    const lat1Rad = lat1 * Math.PI / 180;
+    const lon1Rad = lon1 * Math.PI / 180;
+    const bearingRad = bearing * Math.PI / 180;
+    // 目的地の緯度を計算 (ラジアン)
+    const lat2Rad = Math.asin(
+      Math.sin(lat1Rad) * Math.cos(distance / R) +
+      Math.cos(lat1Rad) * Math.sin(distance / R) * Math.cos(bearingRad)
+    );
+    // 目的地の経度を計算 (ラジアン)
+    const lon2Rad = lon1Rad + Math.atan2(
+      Math.sin(bearingRad) * Math.sin(distance / R) * Math.cos(lat1Rad),
+      Math.cos(distance / R) - Math.sin(lat1Rad) * Math.sin(lat2Rad)
+    );
+    // 緯度経度を度に変換
+    const lat2 = lat2Rad * 180 / Math.PI;
+    const lon2 = lon2Rad * 180 / Math.PI;
+    return [lon2, lat2];
+  }
+  function moveFav(distance, bearing) {
+    if (favorites.length === 0) return;
+    const marker = favorites.at(-1);
+    const src = marker.getLngLat();
+    const dst = destination(src.lng, src.lat, distance, bearing);
+    console.log(`${src} ${dst}`);
+    marker.setLngLat(dst);
+  }
+  ["N", "NE", "E", "SE", "S", "SW", "W", "NW"].forEach((e, i) => {
+    document.getElementById("moveFav" + e).addEventListener("click", () => {
+      moveFav(1, i * 45);
+      updateFavorites();
+    });
+  });
 
   /**
    * お気に入りの表示(近傍円など)を更新
@@ -434,7 +478,7 @@
     const features = [];
     const locked = !isEditableFav();
     favorites.toReversed().forEach((marker, index) => {
-      marker.setOpacity(locked ? 0.2 : 0.3);
+      marker.setOpacity(locked ? 0.4 : 0.6);
       const { lat, lng } = marker.getLngLat();
       const circle = turf.circle([lng, lat], radius / 1000, { steps: 24, properties: { index } });
       features.push(circle);
@@ -448,37 +492,36 @@
     onUpdatedFavorite();
   }
 
-
   document.getElementById("fav_radius").addEventListener("change", e => {
     updateTrajectory();
     updateFavorites();
   });
 
-
-  /**
-   * 全削除
-   */
-  function clearAll() {
-    favorites.forEach(m => m.remove());
-    if (isEditableFav()) {
-      favorites.splice(0);
-      updateFavorites();
-    }
-    trajectory.splice(0);
-    updateTrajectory();
-  }
-
   /**
    * お気に入りをURLクエリに保存
    */
-  function saveUrl() {
+  async function saveUrl(share) {
     const params = new URLSearchParams(location.search);
     if (favorites.length > 0) {
       const latLngs = favorites.map(m => m.getLngLat()).map(p => [p.lat, p.lng]);
       const encoded = encodePolyline(latLngs);
       params.set("fav", encoded);
       history.replaceState(null, "", `${location.pathname}?${params.toString()}`);
-      showToast("URLクエリにお気に入り座標を追加");
+      if (share) {
+        const shareData = {
+          title: "favorite points",
+          // text: "",
+          url: location.href,
+        };
+        try {
+          await navigator.share(shareData);
+          showToast("共有しました");
+        } catch (err) {
+          showToast(`エラー: ${err}`);
+        }
+      } else {
+        showToast("URLクエリにお気に入り座標を追加");
+      }
     } else {
       history.replaceState(null, "", location.pathname);
       showToast("URLクエリをリセット");
@@ -490,20 +533,20 @@
    */
   function restoreFromUrl() {
     const params = new URLSearchParams(location.search);
-    if (params.has("fav")) {
-      const decoded = decodePolyline(params.get("fav"));
+    for (const fav of params.getAll("fav")) {
+      const decoded = decodePolyline(fav);
       decoded.forEach(([lat, lng]) => addFavorite([lng, lat]));
     }
   }
 
   // ボタン処理
-  document.getElementById("resetView").onclick = () => {
+  document.getElementById("resetView").addEventListener("click", () => {
     if (isLockMap()) return;
     map.easeTo({ center: trajectory.at(-1), zoom: 18, bearing: 0, pitch: DEFAULT_PITCH, duration: 500 });
     document.getElementById("fav_radius").value = 40;
-  }
-  // document.getElementById("clearBtn").onclick = clearAll;
-  document.getElementById("clearTrajBtn").onclick = () => {
+  });
+  // document.getElementById("clearBtn").addEventListener("click", clearAll;
+  document.getElementById("clearTrajBtn").addEventListener("click", () => {
     if (trajectory.length > 1) {
       trajectory.splice(0, trajectory.length - 1);  // 現在位置は残す
       updateTrajectory();
@@ -511,8 +554,8 @@
     } else {
       showToast("軌跡が空");
     }
-  };
-  document.getElementById("addFavBtn").onclick = () => {
+  });
+  document.getElementById("addFavBtn").addEventListener("click", () => {
     if (!isEditableFav()) return;
     if (trajectory.length > 0) {
       // 現在位置（軌跡の最後の座標）をお気に入りに追加
@@ -521,8 +564,8 @@
     } else {
       showToast("現在位置が不明");
     }
-  };
-  document.getElementById("delFavBtn").onclick = () => {
+  });
+  document.getElementById("delFavBtn").addEventListener("click", () => {
     if (!isEditableFav()) return;
     // お気に入りの最後のマーカーを削除
     const m = favorites.pop();
@@ -532,16 +575,17 @@
     } else {
       showToast("お気に入りが空");
     }
-  };
-  document.getElementById("saveUrlBtn").onclick = saveUrl;
-  document.getElementById("downloadCsvBtn").onclick = () => {
+  });
+  document.getElementById("saveUrlBtn").addEventListener("click", () => saveUrl());
+  document.getElementById("shareUrlBtn").addEventListener("click", () => saveUrl(true));
+  document.getElementById("downloadCsvBtn").addEventListener("click", () => {
     if (favorites.length > 0) {
       const latLngs = favorites.map(m => m.getLngLat()).map(p => [p.lat, p.lng]);
       downloadCSV("favorites.csv", latLngs);
     } else {
       showToast("お気に入りが空");
     }
-  };
+  });
   document.getElementById("editableFav").addEventListener("change", () => {
     const draggable = isEditableFav();
     favorites.forEach(e => e.setDraggable(draggable));
