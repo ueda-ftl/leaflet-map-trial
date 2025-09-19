@@ -635,7 +635,12 @@
 
   // 現在位置取得イベント
   geolocate.on("geolocate", (pos) => {
-    const { latitude, longitude } = pos.coords;
+    const { latitude, longitude, heading } = pos.coords;
+    if (heading != null) {
+      showToast(heading);
+      map.setBearing(heading);
+      onUpdatedBearing();
+    }
     const coord = [longitude, latitude];
     trajectory.push(coord);
     // 軌跡更新
