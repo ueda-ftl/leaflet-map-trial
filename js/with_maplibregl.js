@@ -403,7 +403,7 @@
       data: "js/tokyo_motorway_public.geojson",
     });
     map.addLayer({
-      id: "outline",
+      id: "highway-line",
       type: "line",
       source: "highway",
       layout: {},
@@ -418,6 +418,20 @@
           "motorway_link", 5,
           2
         ],
+      },
+    });
+    map.addSource("highway-inflow", {
+      type: "geojson",
+      data: "js/inflows.geojson",
+    });
+    map.addLayer({
+      id: "highway-point",
+      type: "circle",
+      source: "highway-inflow",
+      'layout': {},
+      'paint': {
+        'circle-color': '#0000FF80',
+        'circle-radius': 10,
       },
     });
   }
