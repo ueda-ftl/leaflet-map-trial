@@ -400,7 +400,7 @@
   function updateHighway() {
     map.addSource("highway", {
       type: "geojson",
-      data: "data/tokyo_motorway_public.geojson",
+      data: "js/tokyo_motorway_public.geojson",
     });
     map.addLayer({
       id: "outline",
