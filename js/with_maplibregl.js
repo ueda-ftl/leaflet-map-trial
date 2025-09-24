@@ -200,10 +200,11 @@
     // オーバレイ表示更新
     updateFavorites();
     updateTrajectory();
+    updateHighway();
   }
   document.getElementById("basemapSelect").addEventListener("change", changeTile);
   document.getElementById("with3D").addEventListener("change", () => {
-     changeTile();
+    changeTile();
   });
   document.getElementById("ratioHeight").addEventListener("change", changeTile);
 
@@ -212,6 +213,7 @@
     // オーバレイ表示更新
     updateFavorites();
     updateTrajectory();
+    updateHighway();
   });
   document.getElementById("rotateRight").addEventListener("click", () => {
     if (isLockMap()) return;
@@ -395,6 +397,31 @@
     return source;
   }
 
+  function updateHighway() {
+    map.addSource("highway", {
+      type: "geojson",
+      data: "data/tokyo_motorway_public.geojson",
+    });
+    map.addLayer({
+      id: "outline",
+      type: "line",
+      source: "highway",
+      layout: {},
+      paint: {
+        "line-color": [
+          "match", ["get", "highway"],
+          "motorway_link", "rgba(255, 196, 0, 1)",
+          "rgba(255, 0, 0, 1)"
+        ],
+        "line-width": [
+          "match", ["get", "highway"],
+          "motorway_link", 5,
+          2
+        ],
+      },
+    });
+  }
+
   map.on("load", () => {
     // 現在位置トラッキング開始
     geolocate.trigger();
@@ -408,6 +435,7 @@
     onUpdatedPitch();
     updateFavorites();
     updateTrajectory();
+    updateHighway();
   });
   map.on("zoom", onUpdatedZoom);
   map.on("rotate", onUpdatedBearing)
