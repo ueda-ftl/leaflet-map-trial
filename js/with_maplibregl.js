@@ -64,6 +64,18 @@
         tileSize: 256,
         attribution: "地理院タイル"
       },
+      gsi_pale: {
+        type: "raster",
+        tiles: ["https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png"],
+        tileSize: 256,
+        attribution: "地理院タイル（淡色）"
+      },
+      gsi_white: {
+        type: "raster",
+        tiles: ["https://cyberjapandata.gsi.go.jp/xyz/blank/{z}/{x}/{y}.png"],
+        tileSize: 256,
+        attribution: "地理院タイル（白地図）"
+      },
       gsi_photo: {
         type: "raster",
         tiles: ["https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg"],
@@ -136,7 +148,7 @@
     attributionControl: false,  // 既存Attributionを非表示
     maplibreLogo: true,
     maxPitch: MAX_PITCH,
-    pitch: DEFAULT_PITCH,
+    pitch: 0,
   });
 
   function isEditableFav() {
@@ -428,17 +440,29 @@
       id: "highway-point",
       type: "circle",
       source: "highway-inflow",
-      'layout': {},
-      'paint': {
-        'circle-color': '#0000FF80',
-        'circle-radius': 10,
+      layout: {},
+      paint: {
+        "circle-radius": 10,
+        "circle-color": [
+          "match", ["get", "kind"],
+          "merge", "#0000FF80",  // 本線へリンクが合流、180箇所
+          "link_only", "#E0C04080",  // リンクのみでの合流、75箇所
+          "#20C02080",  // その他(本線のみ、リンクが合流して本線へ、等) 30箇所
+        ],
+        "circle-stroke-width": 2,
+        "circle-stroke-color": [
+          "match", ["get", "kind"],
+          "merge", "#000080C0",
+          "link_only", "#706020C0",
+          "#106010C0",
+        ],
       },
     });
   }
 
   map.on("load", () => {
     // 現在位置トラッキング開始
-    geolocate.trigger();
+    // geolocate.trigger();
 
     // URLから復元
     restoreFromUrl();

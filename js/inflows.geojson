@@ -10,7 +10,9 @@
           35.645389
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -21,7 +23,9 @@
           35.647561
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -32,7 +36,9 @@
           35.649585
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -43,7 +49,9 @@
           35.652825
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -54,7 +62,9 @@
           35.655039
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -65,7 +75,9 @@
           35.664728
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -76,7 +88,9 @@
           35.643247
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -87,7 +101,9 @@
           35.671264
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -98,7 +114,9 @@
           35.627279
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -109,7 +127,9 @@
           35.622144
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -120,7 +140,9 @@
           35.653366
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -131,7 +153,9 @@
           35.635066
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -142,7 +166,9 @@
           35.655166
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -153,7 +179,9 @@
           35.657731
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -164,7 +192,9 @@
           35.613526
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -175,7 +205,9 @@
           35.610176
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -186,7 +218,9 @@
           35.641193
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -197,7 +231,9 @@
           35.644897
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -208,7 +244,9 @@
           35.646309
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -219,7 +257,9 @@
           35.647204
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -230,7 +270,9 @@
           35.651581
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -241,7 +283,9 @@
           35.669456
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -252,7 +296,9 @@
           35.661309
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -263,7 +309,9 @@
           35.558443
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -274,7 +322,9 @@
           35.58577
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -285,7 +335,9 @@
           35.587066
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -296,7 +348,9 @@
           35.537405
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -307,7 +361,9 @@
           35.576535
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -318,7 +374,9 @@
           35.569766
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -329,7 +387,9 @@
           35.566194
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -340,7 +400,9 @@
           35.559915
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -351,7 +413,9 @@
           35.597697
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -362,7 +426,9 @@
           35.592886
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -373,7 +439,9 @@
           35.586981
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -384,7 +452,9 @@
           35.554349
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -395,7 +465,9 @@
           35.549061
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -406,7 +478,9 @@
           35.678416
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -417,7 +491,9 @@
           35.774757
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -428,7 +504,9 @@
           35.717643
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -439,7 +517,9 @@
           35.660904
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -450,7 +530,9 @@
           35.654052
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -461,7 +543,9 @@
           35.628268
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -472,7 +556,9 @@
           35.678789
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -483,7 +569,9 @@
           35.644614
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -494,7 +582,9 @@
           35.679844
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -505,7 +595,9 @@
           35.621673
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -516,7 +608,9 @@
           35.637778
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -527,7 +621,9 @@
           35.691043
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -538,7 +634,9 @@
           35.667918
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -549,7 +647,9 @@
           35.659779
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -560,7 +660,9 @@
           35.676256
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -571,7 +673,9 @@
           35.642669
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -582,7 +686,9 @@
           35.678359
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -593,7 +699,9 @@
           35.742659
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -604,7 +712,9 @@
           35.784247
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -615,7 +725,9 @@
           35.664965
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -626,7 +738,9 @@
           35.665478
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -637,7 +751,9 @@
           35.690363
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -648,7 +764,9 @@
           35.690694
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -659,7 +777,9 @@
           35.671983
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -670,7 +790,9 @@
           35.672605
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -681,7 +803,9 @@
           35.6804
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -692,7 +816,9 @@
           35.669556
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -703,7 +829,9 @@
           35.655793
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -714,7 +842,9 @@
           35.663124
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -725,7 +855,9 @@
           35.668284
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -736,7 +868,9 @@
           35.678322
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -747,7 +881,9 @@
           35.680633
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -758,7 +894,9 @@
           35.681198
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -769,7 +907,9 @@
           35.680549
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -780,7 +920,9 @@
           35.676316
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -791,7 +933,9 @@
           35.644983
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -802,7 +946,9 @@
           35.71457
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -813,7 +959,9 @@
           35.674442
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -824,7 +972,9 @@
           35.605151
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -835,7 +985,9 @@
           35.659446
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -846,7 +998,9 @@
           35.675762
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -857,7 +1011,9 @@
           35.674015
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -868,7 +1024,9 @@
           35.677697
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -879,7 +1037,9 @@
           35.682791
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -890,7 +1050,9 @@
           35.680781
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -901,7 +1063,9 @@
           35.671532
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -912,7 +1076,9 @@
           35.689371
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -923,7 +1089,9 @@
           35.717161
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -934,7 +1102,9 @@
           35.717406
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -945,7 +1115,9 @@
           35.660058
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -956,7 +1128,9 @@
           35.681974
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -967,7 +1141,9 @@
           35.747415
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -978,7 +1154,9 @@
           35.752377
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -989,7 +1167,9 @@
           35.765142
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -1000,7 +1180,9 @@
           35.762246
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1011,7 +1193,9 @@
           35.774165
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1022,7 +1206,9 @@
           35.759643
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1033,7 +1219,9 @@
           35.759177
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1044,7 +1232,9 @@
           35.754044
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1055,7 +1245,9 @@
           35.761864
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1066,7 +1258,9 @@
           35.684707
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1077,7 +1271,9 @@
           35.50614
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1088,7 +1284,9 @@
           35.750772
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1099,7 +1297,9 @@
           35.74125
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1110,7 +1310,9 @@
           35.684664
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1121,7 +1323,9 @@
           35.646546
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1132,7 +1336,9 @@
           35.728864
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1143,7 +1349,9 @@
           35.754495
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1154,7 +1362,9 @@
           35.720284
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1165,7 +1375,9 @@
           35.640297
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -1176,7 +1388,9 @@
           35.634683
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1187,7 +1401,9 @@
           35.681247
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1198,7 +1414,9 @@
           35.688932
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1209,7 +1427,9 @@
           35.688864
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1220,7 +1440,9 @@
           35.553941
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1231,7 +1453,9 @@
           35.751742
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -1242,7 +1466,9 @@
           35.757618
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1253,7 +1479,9 @@
           35.646445
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1264,7 +1492,9 @@
           35.647552
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1275,7 +1505,9 @@
           35.768636
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -1286,7 +1518,9 @@
           35.749454
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1297,7 +1531,9 @@
           35.743139
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1308,7 +1544,9 @@
           35.721863
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1319,7 +1557,9 @@
           35.73131
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1330,7 +1570,9 @@
           35.71885
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1341,7 +1583,9 @@
           35.703827
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1352,7 +1596,9 @@
           35.683358
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1363,7 +1609,9 @@
           35.680479
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1374,7 +1622,9 @@
           35.695653
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1385,7 +1635,9 @@
           35.694021
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -1396,7 +1648,9 @@
           35.681138
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1407,7 +1661,9 @@
           35.682251
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -1418,7 +1674,9 @@
           35.682881
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1429,7 +1687,9 @@
           35.684801
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1440,7 +1700,9 @@
           35.648035
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -1451,7 +1713,9 @@
           35.660092
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1462,7 +1726,9 @@
           35.655461
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1473,7 +1739,9 @@
           35.667986
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -1484,7 +1752,9 @@
           35.676401
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1495,7 +1765,9 @@
           35.670468
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1506,7 +1778,9 @@
           35.645862
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1517,7 +1791,9 @@
           35.697503
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1528,7 +1804,9 @@
           35.796766
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1539,7 +1817,9 @@
           35.640664
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1550,7 +1830,9 @@
           35.640703
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1561,7 +1843,9 @@
           35.641448
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1572,7 +1856,9 @@
           35.737435
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1583,7 +1869,9 @@
           35.717605
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1594,7 +1882,9 @@
           35.699059
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1605,7 +1895,9 @@
           35.780986
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1616,7 +1908,9 @@
           35.77559
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1627,7 +1921,9 @@
           35.547793
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1638,7 +1934,9 @@
           35.640687
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1649,7 +1947,9 @@
           35.623086
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1660,7 +1960,9 @@
           35.693365
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1671,7 +1973,9 @@
           35.692686
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1682,7 +1986,9 @@
           35.654814
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1693,7 +1999,9 @@
           35.653109
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1704,7 +2012,9 @@
           35.672874
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1715,7 +2025,9 @@
           35.676745
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1726,7 +2038,9 @@
           35.679915
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1737,7 +2051,9 @@
           35.737465
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1748,7 +2064,9 @@
           35.79824
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1759,7 +2077,9 @@
           35.723047
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1770,7 +2090,9 @@
           35.693212
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1781,7 +2103,9 @@
           35.647581
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1792,7 +2116,9 @@
           35.6814
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1803,7 +2129,9 @@
           35.728851
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1814,7 +2142,9 @@
           35.731305
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1825,7 +2155,9 @@
           35.728023
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1836,7 +2168,9 @@
           35.798036
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1847,7 +2181,9 @@
           35.673018
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1858,7 +2194,9 @@
           35.67351
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1869,7 +2207,9 @@
           35.69283
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1880,7 +2220,9 @@
           35.692957
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1891,7 +2233,9 @@
           35.69319
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1902,7 +2246,9 @@
           35.719374
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1913,7 +2259,9 @@
           35.623103
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1924,7 +2272,9 @@
           35.625147
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1935,7 +2285,9 @@
           35.639038
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1946,7 +2298,9 @@
           35.641672
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1957,7 +2311,9 @@
           35.685213
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -1968,7 +2324,9 @@
           35.688405
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -1979,7 +2337,9 @@
           35.681093
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -1990,7 +2350,9 @@
           35.681617
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2001,7 +2363,9 @@
           35.740058
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2012,7 +2376,9 @@
           35.6841
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -2023,7 +2389,9 @@
           35.582382
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2034,7 +2402,9 @@
           35.679884
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2045,7 +2415,9 @@
           35.647011
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2056,7 +2428,9 @@
           35.669622
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2067,7 +2441,9 @@
           35.689522
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2078,7 +2454,9 @@
           35.625914
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2089,7 +2467,9 @@
           35.680167
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2100,7 +2480,9 @@
           35.708181
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2111,7 +2493,9 @@
           35.73893
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2122,7 +2506,9 @@
           35.738738
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2133,7 +2519,9 @@
           35.754342
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2144,7 +2532,9 @@
           35.717248
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2155,7 +2545,9 @@
           35.784257
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2166,7 +2558,9 @@
           35.648779
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2177,7 +2571,9 @@
           35.706954
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2188,7 +2584,9 @@
           35.659676
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2199,7 +2597,9 @@
           35.695337
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2210,7 +2610,9 @@
           35.776251
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2221,7 +2623,9 @@
           35.777482
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2232,7 +2636,9 @@
           35.778903
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2243,7 +2649,9 @@
           35.60647
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -2254,7 +2662,9 @@
           35.757443
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2265,7 +2675,9 @@
           35.585741
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2276,7 +2688,9 @@
           35.658153
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2287,7 +2701,9 @@
           35.62263
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2298,7 +2714,9 @@
           35.722162
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2309,7 +2727,9 @@
           35.656173
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2320,7 +2740,9 @@
           35.628756
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2331,7 +2753,9 @@
           35.650072
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2342,7 +2766,9 @@
           35.651873
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2353,7 +2779,9 @@
           35.673578
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2364,7 +2792,9 @@
           35.640049
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2375,7 +2805,9 @@
           35.598758
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2386,7 +2818,9 @@
           35.759406
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2397,7 +2831,9 @@
           35.74672
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -2408,7 +2844,9 @@
           35.694802
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2419,7 +2857,9 @@
           35.66592
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2430,7 +2870,9 @@
           35.646326
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2441,7 +2883,9 @@
           35.68041
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2452,7 +2896,9 @@
           35.594936
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2463,7 +2909,9 @@
           35.590619
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2474,7 +2922,9 @@
           35.765972
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2485,7 +2935,9 @@
           35.508685
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2496,7 +2948,9 @@
           35.749219
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2507,7 +2961,9 @@
           35.73806
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2518,7 +2974,9 @@
           35.733426
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2529,7 +2987,9 @@
           35.626968
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2540,7 +3000,9 @@
           35.505452
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2551,7 +3013,9 @@
           35.682587
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2562,7 +3026,9 @@
           35.756804
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2573,7 +3039,9 @@
           35.642109
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2584,7 +3052,9 @@
           35.762026
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2595,7 +3065,9 @@
           35.65979
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2606,7 +3078,9 @@
           35.676277
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2617,7 +3091,9 @@
           35.683187
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2628,7 +3104,9 @@
           35.673151
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -2639,7 +3117,9 @@
           35.65125
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2650,7 +3130,9 @@
           35.650861
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2661,7 +3143,9 @@
           35.678466
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2672,7 +3156,9 @@
           35.760578
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2683,7 +3169,9 @@
           35.678643
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2694,7 +3182,9 @@
           35.540222
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2705,7 +3195,9 @@
           35.738287
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2716,7 +3208,9 @@
           35.761942
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2727,7 +3221,9 @@
           35.626616
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2738,7 +3234,9 @@
           35.683879
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -2749,7 +3247,9 @@
           35.679172
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -2760,7 +3260,9 @@
           35.555982
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2771,7 +3273,9 @@
           35.67027
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2782,7 +3286,9 @@
           35.681459
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2793,7 +3299,9 @@
           35.556994
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2804,7 +3312,9 @@
           35.59919
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2815,7 +3325,9 @@
           35.659581
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2826,7 +3338,9 @@
           35.79692
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2837,7 +3351,9 @@
           35.702691
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2848,7 +3364,9 @@
           35.699
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2859,7 +3377,9 @@
           35.682651
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2870,7 +3390,9 @@
           35.640939
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2881,7 +3403,9 @@
           35.780227
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2892,7 +3416,9 @@
           35.797944
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2903,7 +3429,9 @@
           35.796873
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2914,7 +3442,9 @@
           35.796988
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -2925,7 +3455,9 @@
           35.633624
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2936,7 +3468,9 @@
           35.671504
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2947,7 +3481,9 @@
           35.64915
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2958,7 +3494,9 @@
           35.699062
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2969,7 +3507,9 @@
           35.646127
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -2980,7 +3520,9 @@
           35.762197
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -2991,7 +3533,9 @@
           35.763874
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -3002,7 +3546,9 @@
           35.653411
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -3013,7 +3559,9 @@
           35.676313
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "other"
+      }
     },
     {
       "type": "Feature",
@@ -3024,7 +3572,9 @@
           35.60134
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -3035,7 +3585,9 @@
           35.585307
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -3046,7 +3598,9 @@
           35.588867
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -3057,7 +3611,9 @@
           35.577363
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -3068,7 +3624,9 @@
           35.577685
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -3079,7 +3637,9 @@
           35.717412
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -3090,7 +3650,9 @@
           35.738773
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -3101,7 +3663,9 @@
           35.738717
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -3112,7 +3676,9 @@
           35.738826
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     },
     {
       "type": "Feature",
@@ -3123,7 +3689,9 @@
           35.796079
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "merge"
+      }
     },
     {
       "type": "Feature",
@@ -3134,7 +3702,9 @@
           35.693163
         ]
       },
-      "properties": {}
+      "properties": {
+        "kind": "link_only"
+      }
     }
   ]
 }

@@ -35,16 +35,18 @@
 		<div class="secondary-group">
 			<select id="basemapSelect">
 				<option value="osm" title="OpenStreetMap">osm</option>
-				<option value="gsi_std" title="国土地理院 標準地図">gsi</option>
-				<option value="gsi_photo" title="国土地理院 航空写真">gsip</option>
-				<option value="google" title="Google Maps">gmap</option>
+				<option value="gsi_std" title="国土地理院 標準">gsi</option>
+				<option value="gsi_pale" title="国土地理院 淡色">pale</option>
+				<option value="gsi_white" title="国土地理院 白地図">white</option>
+				<option value="gsi_photo" title="国土地理院 航空写真">photo</option>
+				<option value="google" title="Google Maps">google</option>
 				<option value="osm_vec" title="OpenStreetMap Vector">osm_vec</option>
 				<option value="gsi_vec" title="国土地理院 Vector">gsi_vec</option>
 			</select>
 		</div>
 		<div>
 			<span class="secondary">
-				<input id="with3D" type="checkbox" class="toggle-checkbox" checked />
+				<input id="with3D" type="checkbox" class="toggle-checkbox" />
 				<label for="with3D" class="toggle-label"></label>
 				<i class="fa-solid fa-cubes" style="margin: 0 5px 0 -3px;"
 					onclick="document.getElementById('with3D').click();"></i>
@@ -57,6 +59,11 @@
 		<button id="clearTrajBtn" class="secondary" title="軌跡削除"><i class="fa-solid fa-eraser"></i></button>
 	</div>
 	<div class="controls rt">
+		<ul class="tertiary-group" style="list-style:none;">
+			<li><i class="fa-solid fa-circle" style="color:#0000FF80;"></i>main+link &rarr; main (180)</li>
+			<li><i class="fa-solid fa-circle" style="color:#E0C040;"></i>link+link &rarr; link (75)</li>
+			<li><i class="fa-solid fa-circle" style="color:#20C020;"></i>other (30)</li>
+		</ul>
 		<div class="tertiary-group">
 			<span id="v_bearing" class="value"></span>
 			<button id="rotateRight" title="時計回り"><i class="fa-solid fa-rotate-right"></i></button>
@@ -101,7 +108,8 @@
 	</div>
 	<div class="controls lb">
 		<button id="saveUrlBtn" class="secondary" title="URL保存"><i class="fa-solid fa-bookmark"></i></button>
-		<button id="shareUrlBtn" class="secondary" title="URL保存+共有"><i class="fa-solid fa-share-from-square"></i></button>
+		<button id="shareUrlBtn" class="secondary" title="URL保存+共有"><i
+				class="fa-solid fa-share-from-square"></i></button>
 		<button id="downloadCsvBtn" class="secondary" title="CSV保存"><i class="fa-solid fa-file-csv"></i></button>
 	</div>
 	<div class="controls rb">
